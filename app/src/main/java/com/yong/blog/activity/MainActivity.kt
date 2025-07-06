@@ -1,4 +1,4 @@
-package com.yong.blog
+package com.yong.blog.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
