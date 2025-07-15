@@ -1,5 +1,7 @@
 package com.yong.blog.list.ui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
@@ -8,5 +10,17 @@ fun ListScreen(
     onNavigateToDetail: () -> Unit,
     onNavigateToMain: () -> Unit
 ) {
-    Text("List")
+    Column {
+        Text("List")
+        Button(
+            onClick = onNavigateToMain
+        ){
+            Text("Back to Main")
+        }
+        Button(
+            onClick = onNavigateToDetail
+        ){
+            Text("Go to Detail")
+        }
+    }
 }

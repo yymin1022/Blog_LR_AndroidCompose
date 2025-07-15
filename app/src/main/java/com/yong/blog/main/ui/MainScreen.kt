@@ -1,5 +1,7 @@
 package com.yong.blog.main.ui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
@@ -7,5 +9,12 @@ import androidx.compose.runtime.Composable
 fun MainScreen(
     onNavigateToList: () -> Unit
 ) {
-    Text("Main")
+    Column {
+        Text("Main")
+        Button(
+           onClick = onNavigateToList
+        ){
+            Text("Go to List")
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.yong.blog.detail.ui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
@@ -8,5 +10,17 @@ fun DetailScreen(
     onNavigateToList: () -> Unit,
     onNavigateToMain: () -> Unit
 ) {
-    Text("Detail")
+    Column {
+        Text("Detail")
+        Button(
+            onClick = onNavigateToMain
+        ){
+            Text("Back to Main")
+        }
+        Button(
+            onClick = onNavigateToList
+        ){
+            Text("Back to List")
+        }
+    }
 }
