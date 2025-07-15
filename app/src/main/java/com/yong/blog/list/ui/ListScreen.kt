@@ -1,12 +1,12 @@
-package com.yong.blog.screen.detail
+package com.yong.blog.list.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun DetailScreen(
-    onNavigateToList: () -> Unit,
+fun ListScreen(
+    onNavigateToDetail: () -> Unit,
     onNavigateToMain: () -> Unit
 ) {
-    Text("Detail")
+    Text("List")
 }

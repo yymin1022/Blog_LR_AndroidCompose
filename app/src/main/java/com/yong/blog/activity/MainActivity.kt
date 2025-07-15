@@ -13,10 +13,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.yong.blog.screen.RouteDefinition
-import com.yong.blog.screen.detail.DetailScreen
-import com.yong.blog.screen.list.ListScreen
-import com.yong.blog.screen.main.MainScreen
+import com.yong.blog.navigation.RouteDefinition
+import com.yong.blog.detail.ui.DetailScreen
+import com.yong.blog.list.ui.ListScreen
+import com.yong.blog.main.ui.MainScreen
 import com.yong.blog.ui.theme.Blog_LRTheme
 import dagger.hilt.android.AndroidEntryPoint
 

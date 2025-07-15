@@ -1,4 +1,4 @@
-package com.yong.blog.screen.main
+package com.yong.blog.main.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
