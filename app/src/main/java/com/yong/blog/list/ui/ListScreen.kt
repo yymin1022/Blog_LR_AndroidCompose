@@ -7,19 +7,19 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun ListScreen(
-    type: String,
-    onNavigateToDetail: () -> Unit,
+    postType: String,
+    onNavigateToDetail: (String, String) -> Unit,
     onNavigateToMain: () -> Unit
 ) {
     Column {
-        Text("List (Type: $type)")
+        Text("List (Type: $postType)")
         Button(
             onClick = onNavigateToMain
         ){
             Text("Back to Main")
         }
         Button(
-            onClick = onNavigateToDetail
+            onClick = { onNavigateToDetail(postType, "TempID") }
         ){
             Text("Go to Detail")
         }

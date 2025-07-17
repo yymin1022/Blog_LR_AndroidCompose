@@ -7,11 +7,13 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun DetailScreen(
+    postType: String,
+    postID: String,
     onNavigateToList: () -> Unit,
     onNavigateToMain: () -> Unit
 ) {
     Column {
-        Text("Detail")
+        Text("Detail (Type: $postType, ID: $postID)")
         Button(
             onClick = onNavigateToMain
         ){

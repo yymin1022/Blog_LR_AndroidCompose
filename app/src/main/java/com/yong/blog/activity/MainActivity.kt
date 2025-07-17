@@ -56,8 +56,8 @@ fun BlogNavHost(
             route = RouteDefinition.Main.route
         ) {
             MainScreen(
-                onNavigateToList = { type ->
-                    navController.navigate(RouteDefinition.List.createRoute(type))
+                onNavigateToList = { postType ->
+                    navController.navigate(RouteDefinition.List.createRoute(postType))
                 }
             )
         }
@@ -65,20 +65,36 @@ fun BlogNavHost(
         composable(
             route = RouteDefinition.List.route,
             arguments = listOf(
-                navArgument("type") { type = NavType.StringType }
+                navArgument("postType") { type = NavType.StringType }
             )
         ) { backStack ->
-            val type = backStack.arguments?.getString("type") ?: throw Exception("Type Undefined")
+            val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
             ListScreen(
-                type = type,
-                onNavigateToDetail = { navController.navigate(RouteDefinition.Detail.route) },
-                onNavigateToMain = { navController.popBackStack() }
+                postType = postType,
+                onNavigateToDetail = { postType, postID ->
+                    navController.navigate(RouteDefinition.Detail.createRoute(postType, postID))
+                },
+                onNavigateToMain = {
+                    navController.popBackStack()
+                }
             )
         }
 
-        composable(RouteDefinition.Detail.route) {
+        composable(
+            route = RouteDefinition.Detail.route,
+            arguments = listOf(
+                navArgument("postType") { type = NavType.StringType },
+                navArgument("postID") { type = NavType.StringType }
+            )
+        ) { backStack ->
+            val postID = backStack.arguments?.getString("postID") ?: throw Exception("ID Undefined")
+            val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
             DetailScreen(
-                onNavigateToList = { navController.popBackStack() },
+                postType = postType,
+                postID = postID,
+                onNavigateToList = {
+                    navController.popBackStack()
+                },
                 onNavigateToMain = {
                     navController.popBackStack(
                         RouteDefinition.Main.route,
