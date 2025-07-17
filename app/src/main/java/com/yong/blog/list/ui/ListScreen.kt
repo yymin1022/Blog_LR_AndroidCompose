@@ -7,11 +7,12 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun ListScreen(
+    type: String,
     onNavigateToDetail: () -> Unit,
     onNavigateToMain: () -> Unit
 ) {
     Column {
-        Text("List")
+        Text("List (Type: $type)")
         Button(
             onClick = onNavigateToMain
         ){

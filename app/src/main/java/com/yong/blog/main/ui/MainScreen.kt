@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun MainScreen(
-    onNavigateToList: () -> Unit
+    onNavigateToList: (String) -> Unit
 ) {
     Column {
         Text("Main")
         Button(
-           onClick = onNavigateToList
+           onClick = { onNavigateToList("TempType") }
         ){
             Text("Go to List")
         }

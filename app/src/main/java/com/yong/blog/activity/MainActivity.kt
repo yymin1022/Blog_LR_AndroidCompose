@@ -10,9 +10,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.yong.blog.navigation.RouteDefinition
 import com.yong.blog.detail.ui.DetailScreen
 import com.yong.blog.list.ui.ListScreen
@@ -50,14 +52,25 @@ fun BlogNavHost(
         navController = navController,
         startDestination = RouteDefinition.Main.route
     ) {
-        composable(RouteDefinition.Main.route) {
+        composable(
+            route = RouteDefinition.Main.route
+        ) {
             MainScreen(
-                onNavigateToList = { navController.navigate(RouteDefinition.List.route) }
+                onNavigateToList = { type ->
+                    navController.navigate(RouteDefinition.List.createRoute(type))
+                }
             )
         }
 
-        composable(RouteDefinition.List.route) {
+        composable(
+            route = RouteDefinition.List.route,
+            arguments = listOf(
+                navArgument("type") { type = NavType.StringType }
+            )
+        ) { backStack ->
+            val type = backStack.arguments?.getString("type") ?: throw Exception("Type Undefined")
             ListScreen(
+                type = type,
                 onNavigateToDetail = { navController.navigate(RouteDefinition.Detail.route) },
                 onNavigateToMain = { navController.popBackStack() }
             )
