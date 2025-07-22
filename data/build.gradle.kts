@@ -12,5 +12,7 @@ kotlin {
     }
 }
 dependencies {
+    implementation(project(":domain"))
     implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 }
