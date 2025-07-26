@@ -4,6 +4,7 @@ import com.yong.blog.data.api.dto.request.PostDataRequest
 import com.yong.blog.data.api.dto.request.PostImageRequest
 import com.yong.blog.data.api.dto.request.PostListRequest
 import com.yong.blog.data.api.dto.response.PostDataResponse
+import com.yong.blog.data.api.dto.response.toDomain
 import com.yong.blog.data.api.service.ApiService
 import com.yong.blog.domain.model.PostData
 import com.yong.blog.domain.model.PostImage
@@ -22,15 +23,7 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
             TODO("Error Handling")
         }
 
-        return PostData(
-            postID = postID,
-            postContent = responseDto.RESULT_DATA.postContent,
-            postDate = responseDto.RESULT_DATA.postDate,
-            postIsPinned = responseDto.RESULT_DATA.postIsPinned,
-            postTag = responseDto.RESULT_DATA.postTag,
-            postTitle = responseDto.RESULT_DATA.postTitle,
-            postUrl = responseDto.RESULT_DATA.postURL,
-        )
+        return responseDto.RESULT_DATA.toDomain(postID)
     }
 
     override suspend fun getPostImage(
@@ -46,9 +39,7 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
             TODO("Error Handling")
         }
 
-        return PostImage(
-            base64Str = responseDto.RESULT_DATA.base64Str
-        )
+        return responseDto.RESULT_DATA.toDomain()
     }
 
     override suspend fun getPostList(postType: String): PostList {
@@ -60,9 +51,6 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
             TODO("Error Handling")
         }
 
-        return PostList(
-            postCount = responseDto.RESULT_DATA.postCount,
-            postList = emptyList(),
-        )
+        return responseDto.RESULT_DATA.toDomain()
     }
 }
