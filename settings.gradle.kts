@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Blog_LR"
 include(":app")
 include(":domain")
+include(":data")
