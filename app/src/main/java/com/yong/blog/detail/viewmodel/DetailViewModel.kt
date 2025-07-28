@@ -19,7 +19,7 @@ class DetailViewModel @Inject constructor(
     private val _postData = MutableStateFlow<PostData?>(null)
     val postData: StateFlow<PostData?> = _postData.asStateFlow()
 
-    private val _postImages = MutableStateFlow<MutableList<PostImage>>(mutableListOf())
+    private val _postImages = MutableStateFlow<List<PostImage>>(emptyList())
     val postImages: StateFlow<List<PostImage>> = _postImages.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
@@ -45,7 +45,7 @@ class DetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val postImage = repository.getPostImage(type, id, srcID)
-                _postImages.value.add(postImage)
+                _postImages.value = _postImages.value.toMutableList().apply { add(postImage) }
             } catch(e: Exception) {
                 // TODO: Error Handling
                 e.printStackTrace()
