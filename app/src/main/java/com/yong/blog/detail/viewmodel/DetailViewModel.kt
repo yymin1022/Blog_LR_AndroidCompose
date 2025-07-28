@@ -3,6 +3,7 @@ package com.yong.blog.detail.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yong.blog.domain.model.PostData
+import com.yong.blog.domain.model.PostImage
 import com.yong.blog.domain.repository.PostDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -17,6 +18,9 @@ class DetailViewModel @Inject constructor(
 ): ViewModel() {
     private val _postData = MutableStateFlow<PostData?>(null)
     val postData: StateFlow<PostData?> = _postData.asStateFlow()
+
+    private val _postImages = MutableStateFlow<MutableList<PostImage>>(mutableListOf())
+    val postImages: StateFlow<List<PostImage>> = _postImages.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -33,6 +37,18 @@ class DetailViewModel @Inject constructor(
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    fun getPostImage(type: String, id: String, srcID: String) {
+        viewModelScope.launch {
+            try {
+                val postImage = repository.getPostImage(type, id, srcID)
+                _postImages.value.add(postImage)
+            } catch(e: Exception) {
+                // TODO: Error Handling
+                e.printStackTrace()
             }
         }
     }
