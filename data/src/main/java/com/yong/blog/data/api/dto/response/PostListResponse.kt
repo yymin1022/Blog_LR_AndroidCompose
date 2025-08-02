@@ -4,14 +4,14 @@ import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 
 data class PostListResponse(
-    val postCount: Int,
-    val postList: List<PostListItemResponse>
+    val PostCount: Int,
+    val PostList: List<PostListItemResponse>
 )
 
 data class PostListItemResponse(
     val postDate: String,
     val postID: String,
-    val postIsPinned: String,
+    val postIsPinned: Boolean,
     val postTag: List<String>,
     val postTitle: String,
     val postURL: String
@@ -19,8 +19,8 @@ data class PostListItemResponse(
 
 fun PostListResponse.toDomain() =
     PostList(
-        postCount = this.postCount,
-        postList = this.postList.map { it.toDomain() }
+        postCount = this.PostCount,
+        postList = this.PostList.map { it.toDomain() }
     )
 
 private fun PostListItemResponse.toDomain() =
