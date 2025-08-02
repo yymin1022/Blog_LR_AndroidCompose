@@ -1,14 +1,15 @@
 package com.yong.blog.data.api.dto.response
 
+import com.google.gson.annotations.SerializedName
 import com.yong.blog.domain.model.PostData
 
 data class PostDataResponse(
-    val postContent: String,
-    val postDate: String,
-    val postIsPinned: Boolean,
-    val postTag: List<String>,
-    val postTitle: String,
-    val postURL: String
+    @SerializedName("PostContent") val postContent: String,
+    @SerializedName("PostDate") val postDate: String,
+    @SerializedName("PostIsPinned") val postIsPinned: Boolean,
+    @SerializedName("PostTag") val postTag: List<String>,
+    @SerializedName("PostTitle") val postTitle: String,
+    @SerializedName("PostURL") val postURL: String
 )
 
 fun PostDataResponse.toDomain(postID: String) =
