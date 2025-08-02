@@ -2,34 +2,35 @@ package com.yong.blog.di
 
 import com.yong.blog.data.api.manager.ApiManager
 import com.yong.blog.data.api.manager.ApiManagerImpl
+import com.yong.blog.data.api.service.ApiService
 import com.yong.blog.data.repository.PostDetailRepositoryImpl
 import com.yong.blog.data.repository.PostListRepositoryImpl
 import com.yong.blog.domain.repository.PostDetailRepository
 import com.yong.blog.domain.repository.PostListRepository
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-    @Binds
+object RepositoryModule {
+    @Provides
     @Singleton
-    abstract fun bindApiManager(
-        impl: ApiManagerImpl
-    ): ApiManager
+    fun provideApiManager(
+        apiService: ApiService
+    ): ApiManager = ApiManagerImpl(apiService)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindPostListRepository(
-        impl: PostListRepositoryImpl
-    ): PostListRepository
+    fun providePostListRepository(
+        apiManager: ApiManager
+    ): PostListRepository = PostListRepositoryImpl(apiManager)
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindPostDetailRepository(
-        impl: PostDetailRepositoryImpl
-    ): PostDetailRepository
+    fun providePostDetailRepository(
+        apiManager: ApiManager
+    ): PostDetailRepository = PostDetailRepositoryImpl(apiManager)
 }
