@@ -12,9 +12,19 @@ fun MainScreen(
     Column {
         Text("Main")
         Button(
-           onClick = { onNavigateToList("TempType") }
+           onClick = { onNavigateToList("blog") }
         ){
-            Text("Go to List")
+            Text("Go to Blog List")
+        }
+        Button(
+            onClick = { onNavigateToList("project") }
+        ){
+            Text("Go to Project List")
+        }
+        Button(
+            onClick = { onNavigateToList("about") }
+        ){
+            Text("Go to About List")
         }
     }
 }

@@ -8,7 +8,7 @@ data class PostList(
 data class PostListItem(
     val postDate: String,
     val postID: String,
-    val postIsPinned: String,
+    val postIsPinned: Boolean,
     val postTag: List<String>,
     val postTitle: String,
     val postURL: String
