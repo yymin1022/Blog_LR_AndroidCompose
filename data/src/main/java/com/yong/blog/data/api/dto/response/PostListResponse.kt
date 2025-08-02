@@ -1,11 +1,12 @@
 package com.yong.blog.data.api.dto.response
 
+import com.google.gson.annotations.SerializedName
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 
 data class PostListResponse(
-    val PostCount: Int,
-    val PostList: List<PostListItemResponse>
+    @SerializedName("PostCount") val postCount: Int,
+    @SerializedName("PostList") val postList: List<PostListItemResponse>
 )
 
 data class PostListItemResponse(
@@ -19,8 +20,8 @@ data class PostListItemResponse(
 
 fun PostListResponse.toDomain() =
     PostList(
-        postCount = this.PostCount,
-        postList = this.PostList.map { it.toDomain() }
+        postCount = this.postCount,
+        postList = this.postList.map { it.toDomain() }
     )
 
 private fun PostListItemResponse.toDomain() =
