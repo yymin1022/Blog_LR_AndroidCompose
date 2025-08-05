@@ -38,11 +38,11 @@ fun ListScreen(
                 if(postList != null) {
                     items(postList?.postCount ?: 0) { idx ->
                         val postID = postList!!.postList[idx].postID
-                        Button(
-                            onClick = { onNavigateToDetail(postType, postID) }
-                        ) {
-                            Text("Go to Post[$postID]")
-                        }
+                        PostListItem(
+                            postType = postType,
+                            postID = postID,
+                            onNavigateToDetail = onNavigateToDetail
+                        )
                     }
                 } else {
                     item {
@@ -53,5 +53,18 @@ fun ListScreen(
         } else {
             CircularProgressIndicator()
         }
+    }
+}
+
+@Composable
+private fun PostListItem(
+    postType: String,
+    postID: String,
+    onNavigateToDetail: (String, String) -> Unit
+) {
+    Button(
+        onClick = { onNavigateToDetail(postType, postID) }
+    ) {
+        Text("Go to Post[$postID]")
     }
 }
