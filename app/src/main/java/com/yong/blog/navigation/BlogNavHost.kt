@@ -43,6 +43,8 @@ fun BlogNavHost(
             val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
 
             ListScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
                 postType = postType,
                 onNavigateToDetail = { postType, postID ->
                     navController.navigate(RouteDefinition.Detail.createRoute(postType, postID))
