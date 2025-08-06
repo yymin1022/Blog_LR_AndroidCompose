@@ -41,7 +41,7 @@ fun ListScreen(
                         PostListItem(
                             postType = postType,
                             postID = postID,
-                            onNavigateToDetail = onNavigateToDetail
+                            onClick = onNavigateToDetail
                         )
                     }
                 } else {
@@ -60,10 +60,10 @@ fun ListScreen(
 private fun PostListItem(
     postType: String,
     postID: String,
-    onNavigateToDetail: (String, String) -> Unit
+    onClick: (String, String) -> Unit
 ) {
     Button(
-        onClick = { onNavigateToDetail(postType, postID) }
+        onClick = { onClick(postType, postID) }
     ) {
         Text("Go to Post[$postID]")
     }
