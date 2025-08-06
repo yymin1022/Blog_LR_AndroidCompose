@@ -1,5 +1,6 @@
 package com.yong.blog.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -25,6 +26,8 @@ fun BlogNavHost(
             route = RouteDefinition.Main.route
         ) {
             MainScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
                 onNavigateToList = { postType ->
                     navController.navigate(RouteDefinition.List.createRoute(postType))
                 }
