@@ -10,7 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.yong.blog.navigation.BlogNavHost
-import com.yong.blog.ui.theme.Blog_LRTheme
+import com.yong.blog.common.ui.theme.Blog_LRTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.yong.blog.ui.theme
+package com.yong.blog.common.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
