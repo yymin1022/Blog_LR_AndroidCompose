@@ -1,5 +1,6 @@
 package com.yong.blog.navigation
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -25,6 +26,8 @@ fun BlogNavHost(
             route = RouteDefinition.Main.route
         ) {
             MainScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
                 onNavigateToList = { postType ->
                     navController.navigate(RouteDefinition.List.createRoute(postType))
                 }
@@ -40,6 +43,8 @@ fun BlogNavHost(
             val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
 
             ListScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
                 postType = postType,
                 onNavigateToDetail = { postType, postID ->
                     navController.navigate(RouteDefinition.Detail.createRoute(postType, postID))
@@ -61,6 +66,8 @@ fun BlogNavHost(
             val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
 
             DetailScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
                 postType = postType,
                 postID = postID,
                 onNavigateToList = {
