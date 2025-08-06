@@ -66,6 +66,8 @@ fun BlogNavHost(
             val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
 
             DetailScreen(
+                modifier = Modifier
+                    .fillMaxSize(),
                 postType = postType,
                 postID = postID,
                 onNavigateToList = {
