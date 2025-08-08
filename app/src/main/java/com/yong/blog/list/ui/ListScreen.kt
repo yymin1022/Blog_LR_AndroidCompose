@@ -25,9 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.common.ui.BlogAppBar
+import com.yong.blog.common.ui.theme.BlueGrey40
 import com.yong.blog.domain.model.PostListItem
 import com.yong.blog.list.viewmodel.ListViewModel
 
@@ -169,8 +172,65 @@ private fun PostListItemText(
         modifier = modifier
             .fillMaxSize()
     ) {
-        Text("Title: $postTitle")
-        Text("Date: $postDate")
-        Text("Tag: $postTag")
+        PostListItemTextTitle(
+            modifier = Modifier,
+            postTitle = postTitle
+        )
+        PostListItemTextDate(
+            modifier = Modifier,
+            postDate = postDate
+        )
+        PostListItemTextTag(
+            modifier = Modifier,
+            postTag = postTag
+        )
     }
+}
+
+@Composable
+private fun PostListItemTextDate(
+    modifier: Modifier = Modifier,
+    postDate: String
+) {
+    Text(
+        modifier = modifier
+            .padding(horizontal = 4.dp, vertical = 2.dp),
+        text = postDate,
+        fontSize = 15.sp,
+        style = TextStyle(
+            color = Color.DarkGray
+        )
+    )
+}
+
+@Composable
+private fun PostListItemTextTag(
+    modifier: Modifier = Modifier,
+    postTag: List<String>
+) {
+    Text(
+        modifier = modifier
+            .padding(horizontal = 4.dp, vertical = 2.dp),
+        text = postTag.toString(),
+        fontSize = 10.sp,
+        style = TextStyle(
+            color = Color.Gray
+        )
+    )
+}
+
+@Composable
+private fun PostListItemTextTitle(
+    modifier: Modifier = Modifier,
+    postTitle: String
+) {
+    Text(
+        modifier = modifier
+            .padding(horizontal = 4.dp, vertical = 4.dp),
+        text = postTitle,
+        fontSize = 20.sp,
+        style = TextStyle(
+            color = BlueGrey40
+        )
+    )
 }
