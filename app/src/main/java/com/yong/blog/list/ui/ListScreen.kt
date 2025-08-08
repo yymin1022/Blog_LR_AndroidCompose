@@ -6,8 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -119,20 +121,19 @@ private fun PostListItem(
 
     Row(
         modifier = modifier
+            .height(96.dp)
             .clickable(onClick = { onClick(postType, postID) })
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .border(border = BorderStroke(1.dp, Color.LightGray))
     ) {
         PostListItemImage(
-            modifier = Modifier
-                .fillMaxHeight(),
+            modifier = Modifier,
             postType = postType,
             postID = postID,
             postThumbnailBase64 = postThumbnail
         )
         PostListItemText(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier,
             postDate = postDate,
             postTag = postTag,
             postTitle = postTitle
@@ -149,6 +150,8 @@ private fun PostListItemImage(
 ) {
     Box(
         modifier = modifier
+            .fillMaxHeight()
+            .aspectRatio(1f / 1f)
     ) {
         Text("Image [$postThumbnailBase64]")
     }
@@ -164,6 +167,7 @@ private fun PostListItemText(
 ) {
     Column(
         modifier = modifier
+            .fillMaxSize()
     ) {
         Text("Title: $postTitle")
         Text("Date: $postDate")
