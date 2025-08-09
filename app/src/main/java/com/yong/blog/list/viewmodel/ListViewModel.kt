@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.repository.PostListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,7 @@ class ListViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     fun getPostList(type: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
 
             try {
