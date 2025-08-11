@@ -8,6 +8,10 @@ import com.yong.blog.domain.repository.PostListRepository
 class PostListRepositoryImpl(
     private val apiManager: ApiManager
 ): PostListRepository {
+    companion object {
+        private const val POST_THUMBNAIL_FILENAME = "thumb.png"
+    }
+
     override suspend fun getPostList(type: String): PostList = apiManager.getPostList(type)
-    override suspend fun getPostThumbnail(type: String, id: String): PostImage = apiManager.getPostImage(type, id, "thumbnail.png")
+    override suspend fun getPostThumbnail(type: String, id: String): PostImage = apiManager.getPostImage(type, id, POST_THUMBNAIL_FILENAME)
 }
