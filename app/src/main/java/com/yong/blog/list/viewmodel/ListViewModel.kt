@@ -2,6 +2,7 @@ package com.yong.blog.list.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yong.blog.domain.model.PostImage
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.repository.PostListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +20,9 @@ class ListViewModel @Inject constructor(
     private val _postList = MutableStateFlow<PostList?>(null)
     val postList: StateFlow<PostList?> = _postList.asStateFlow()
 
+    private val _thumbnailMap = MutableStateFlow<Map<String, PostImage?>>(emptyMap())
+    val thumbnailMap: StateFlow<Map<String, PostImage?>> = _thumbnailMap.asStateFlow()
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
@@ -35,6 +39,13 @@ class ListViewModel @Inject constructor(
             } finally {
                 _isLoading.value = false
             }
+        }
+    }
+
+    fun requestPostThumbnail(type: String, id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val thumbnailImage = repository.getPostThumbnail(type, id)
+            _thumbnailMap.value += (id to thumbnailImage)
         }
     }
 }
