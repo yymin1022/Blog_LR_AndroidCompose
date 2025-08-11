@@ -1,6 +1,9 @@
 package com.yong.blog.list.ui
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -23,15 +26,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.theme.BlueGrey40
+import com.yong.blog.domain.model.PostImage
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 import com.yong.blog.list.viewmodel.ListViewModel
@@ -79,6 +89,7 @@ private fun ListScreenBody(
 ) {
     val isLoading by viewModel.isLoading.collectAsState()
     val postList by viewModel.postList.collectAsState()
+    val thumbnailMap by viewModel.thumbnailMap.collectAsState()
 
     LaunchedEffect(postType) {
         viewModel.getPostList(postType)
@@ -94,6 +105,8 @@ private fun ListScreenBody(
                 modifier = Modifier,
                 postType = postType,
                 postList = postList,
+                thumbnailMap = thumbnailMap,
+                requestPostThumbnail = viewModel::requestPostThumbnail,
                 onNavigateToDetail = onNavigateToDetail
             )
         } else {
@@ -110,6 +123,8 @@ private fun PostList(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
+    thumbnailMap: Map<String, PostImage?>,
+    requestPostThumbnail: (String, String) -> Unit,
     onNavigateToDetail: (String, String) -> Unit
 ) {
     if(postList != null) {
@@ -118,10 +133,14 @@ private fun PostList(
         ) {
             items(postList.postCount) { idx ->
                 val post = postList.postList[idx]
+                val postURL = post.postURL
+                requestPostThumbnail(postType, postURL)
+
                 PostListItem(
                     modifier = Modifier,
                     postType = postType,
                     postData = post,
+                    postThumbnail = thumbnailMap[postURL],
                     onClick = onNavigateToDetail
                 )
             }
@@ -141,12 +160,12 @@ private fun PostListItem(
     modifier: Modifier = Modifier,
     postType: String,
     postData: PostListItem,
+    postThumbnail: PostImage?,
     onClick: (String, String) -> Unit
 ) {
     val postDate = postData.postDate
     val postID = postData.postID
     val postTag = postData.postTag
-    val postThumbnail = "TMP Thumbnail"
     val postTitle = postData.postTitle
 
     Row(
@@ -158,9 +177,7 @@ private fun PostListItem(
     ) {
         PostListItemImage(
             modifier = Modifier,
-            postType = postType,
-            postID = postID,
-            postThumbnailBase64 = postThumbnail
+            postThumbnail = postThumbnail
         )
         PostListItemText(
             modifier = Modifier,
@@ -174,18 +191,36 @@ private fun PostListItem(
 @Composable
 private fun PostListItemImage(
     modifier: Modifier = Modifier,
-    postType: String,
-    postID: String,
-    postThumbnailBase64: String,
+    postThumbnail: PostImage?,
 ) {
+    val context = LocalContext.current
+    val imageRequest = remember(postThumbnail) {
+        postThumbnail?.let {
+            ImageRequest.Builder(context)
+                .data("data:image/png;base64,${it.base64Str}")
+                .size(256)
+                .crossfade(true)
+                .build()
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxHeight()
-            .aspectRatio(1f / 1f)
+            .aspectRatio(1f),
+        contentAlignment = Alignment.Center
     ) {
-        Text("Image [$postThumbnailBase64]")
+        if(postThumbnail != null) {
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = imageRequest,
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            CircularProgressIndicator()
+        }
     }
-
 }
 
 @Composable
