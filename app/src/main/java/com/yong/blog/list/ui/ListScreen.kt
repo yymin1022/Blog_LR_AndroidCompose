@@ -258,7 +258,7 @@ private fun PostListItemTextDate(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postDate,
-        fontSize = 15.sp,
+        fontSize = 12.sp,
         style = TextStyle(
             color = Color.DarkGray
         )
@@ -290,7 +290,7 @@ private fun PostListItemTextTitle(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 4.dp),
         text = postTitle,
-        fontSize = 20.sp,
+        fontSize = 16.sp,
         style = TextStyle(
             color = BlueGrey40
         )
