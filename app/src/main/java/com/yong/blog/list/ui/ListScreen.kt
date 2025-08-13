@@ -41,6 +41,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.yong.blog.common.ui.BlogAppBar
+import com.yong.blog.common.ui.theme.BlogBlue
 import com.yong.blog.common.ui.theme.BlueGrey40
 import com.yong.blog.domain.model.PostImage
 import com.yong.blog.domain.model.PostList
@@ -282,7 +283,7 @@ private fun PostListItemTextTitle(
         text = postTitle,
         fontSize = 16.sp,
         style = TextStyle(
-            color = BlueGrey40
+            color = BlogBlue
         )
     )
 }
