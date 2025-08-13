@@ -1,6 +1,8 @@
 package com.yong.blog.list.ui
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -27,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -120,7 +124,7 @@ private fun PostList(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
-    thumbnailMap: Map<String, PostImage?>,
+    thumbnailMap: Map<String, Bitmap?>,
     requestPostThumbnail: (String, String) -> Unit,
     onNavigateToDetail: (String, String) -> Unit
 ) {
@@ -157,7 +161,7 @@ private fun PostListItem(
     modifier: Modifier = Modifier,
     postType: String,
     postData: PostListItem,
-    postThumbnail: PostImage?,
+    postThumbnail: Bitmap?,
     onClick: (String, String) -> Unit
 ) {
     val postDate = postData.postDate
@@ -188,19 +192,8 @@ private fun PostListItem(
 @Composable
 private fun PostListItemImage(
     modifier: Modifier = Modifier,
-    postThumbnail: PostImage?,
+    postThumbnail: Bitmap?,
 ) {
-    val context = LocalContext.current
-    val imageRequest = remember(postThumbnail) {
-        postThumbnail?.let {
-            ImageRequest.Builder(context)
-                .data("data:image/png;base64,${it.base64Str}")
-                .size(256)
-                .crossfade(true)
-                .build()
-        }
-    }
-
     Box(
         modifier = modifier
             .fillMaxHeight()
@@ -208,9 +201,9 @@ private fun PostListItemImage(
         contentAlignment = Alignment.Center
     ) {
         if(postThumbnail != null) {
-            AsyncImage(
+            Image(
                 modifier = Modifier.fillMaxSize(),
-                model = imageRequest,
+                bitmap = postThumbnail.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
