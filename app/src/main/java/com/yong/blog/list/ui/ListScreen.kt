@@ -30,10 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.theme.BlogBlue
 import com.yong.blog.domain.model.PostList
@@ -45,13 +47,22 @@ fun ListScreen(
     modifier: Modifier = Modifier,
     postType: String,
     onNavigateToDetail: (String, String) -> Unit,
-    onNavigateToMain: () -> Unit
+    onNavigateToMain: () -> Unit,
+    viewModel: ListViewModel = hiltViewModel()
 ) {
+    val appBarTitle by viewModel.appBarTitle.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val postList by viewModel.postList.collectAsState()
+    val thumbnailMap by viewModel.thumbnailMap.collectAsState()
+
+    LaunchedEffect(postType) { viewModel.getAppBarTitle(postType) }
+
     Scaffold(
         modifier = modifier,
         topBar = {
             BlogAppBar(
                 modifier = Modifier,
+                titleText = String.format(stringResource(R.string.list_appbar_title), stringResource(appBarTitle)),
                 navigationIcon = {
                     IconButton(
                         onClick = onNavigateToMain
@@ -69,6 +80,11 @@ fun ListScreen(
             modifier = Modifier
                 .padding(innerPadding),
             postType = postType,
+            isLoading = isLoading,
+            postList = postList,
+            thumbnailMap = thumbnailMap,
+            getPostList = viewModel::getPostList,
+            requestPostThumbnail = viewModel::requestPostThumbnail,
             onNavigateToDetail = onNavigateToDetail
         )
     }
@@ -78,15 +94,15 @@ fun ListScreen(
 private fun ListScreenBody(
     modifier: Modifier = Modifier,
     postType: String,
-    onNavigateToDetail: (String, String) -> Unit,
-    viewModel: ListViewModel = hiltViewModel()
+    isLoading: Boolean,
+    postList: PostList?,
+    thumbnailMap: Map<String, Bitmap?>,
+    getPostList: (String) -> Unit,
+    requestPostThumbnail: (String, String) -> Unit,
+    onNavigateToDetail: (String, String) -> Unit
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val postList by viewModel.postList.collectAsState()
-    val thumbnailMap by viewModel.thumbnailMap.collectAsState()
-
     LaunchedEffect(postType) {
-        viewModel.getPostList(postType)
+        getPostList(postType)
     }
 
     Box(
@@ -100,7 +116,7 @@ private fun ListScreenBody(
                 postType = postType,
                 postList = postList,
                 thumbnailMap = thumbnailMap,
-                requestPostThumbnail = viewModel::requestPostThumbnail,
+                requestPostThumbnail = requestPostThumbnail,
                 onNavigateToDetail = onNavigateToDetail
             )
         } else {
