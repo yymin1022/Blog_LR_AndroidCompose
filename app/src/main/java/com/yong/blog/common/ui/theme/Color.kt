@@ -2,6 +2,9 @@ package com.yong.blog.common.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Blog Theme Color
+val BlogBlue = Color(0xFF164EAB)
+
 // Light Theme Colors
 val Blue80 = Color(0xFF164EAB)        // 라이트모드에서도 기본 색상으로
 val BlueGrey80 = Color(0xFF3B5A91)     // 살짝 연한 느낌의 블루그레이
