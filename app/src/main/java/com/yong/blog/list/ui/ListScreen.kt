@@ -1,9 +1,8 @@
 package com.yong.blog.list.ui
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -182,7 +181,7 @@ private fun PostListItem(
         modifier = modifier
             .height(96.dp)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .border(border = BorderStroke(0.3.dp, Color.LightGray))
+            .background(Color.White)
             .clickable(onClick = { onClick(postType, postID) })
     ) {
         PostListItemImage(
