@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -36,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
+import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.theme.BlogBlue
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
@@ -119,10 +119,7 @@ private fun ListScreenBody(
                 onNavigateToDetail = onNavigateToDetail
             )
         } else {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.Center)
-            )
+            BlogLoadingIndicator(modifier = Modifier)
         }
     }
 }
@@ -216,7 +213,7 @@ private fun PostListItemImage(
                 contentScale = ContentScale.Crop
             )
         } else {
-            CircularProgressIndicator()
+            BlogLoadingIndicator(modifier = Modifier)
         }
     }
 }
