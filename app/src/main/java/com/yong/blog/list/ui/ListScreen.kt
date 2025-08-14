@@ -181,9 +181,9 @@ private fun PostListItem(
     Row(
         modifier = modifier
             .height(96.dp)
-            .clickable(onClick = { onClick(postType, postID) })
             .padding(horizontal = 8.dp, vertical = 4.dp)
             .border(border = BorderStroke(0.3.dp, Color.LightGray))
+            .clickable(onClick = { onClick(postType, postID) })
     ) {
         PostListItemImage(
             modifier = Modifier,
