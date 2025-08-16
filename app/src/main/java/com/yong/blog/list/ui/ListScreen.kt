@@ -55,7 +55,10 @@ fun ListScreen(
     val postList = uiState.postList
     val thumbnailMap = uiState.postThumbnailMap
 
-    LaunchedEffect(postType) { viewModel.getAppBarTitle(postType) }
+    LaunchedEffect(postType) {
+        viewModel.getAppBarTitle(postType)
+        viewModel.getPostList(postType)
+    }
 
     Scaffold(
         modifier = modifier,
@@ -83,7 +86,6 @@ fun ListScreen(
             isLoading = isLoading,
             postList = postList,
             thumbnailMap = thumbnailMap,
-            getPostList = viewModel::getPostList,
             requestPostThumbnail = viewModel::requestPostThumbnail,
             onNavigateToDetail = onNavigateToDetail
         )
@@ -97,14 +99,9 @@ private fun ListScreenBody(
     isLoading: Boolean,
     postList: PostList?,
     thumbnailMap: Map<String, Bitmap?>,
-    getPostList: (String) -> Unit,
     requestPostThumbnail: (String, String) -> Unit,
     onNavigateToDetail: (String, String) -> Unit
 ) {
-    LaunchedEffect(postType) {
-        getPostList(postType)
-    }
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -141,14 +138,15 @@ private fun PostList(
             items(postList.postCount) { idx ->
                 val post = postList.postList[idx]
                 val postURL = post.postURL
-                requestPostThumbnail(postType, postURL)
+                val postThumbnail = thumbnailMap[postURL]
 
                 PostListItem(
                     modifier = Modifier,
                     postType = postType,
                     postData = post,
-                    postThumbnail = thumbnailMap[postURL],
-                    onClick = onNavigateToDetail
+                    postThumbnail = postThumbnail,
+                    onClick = onNavigateToDetail,
+                    requestThumbnail = requestPostThumbnail
                 )
             }
         }
@@ -168,12 +166,18 @@ private fun PostListItem(
     postType: String,
     postData: PostListItem,
     postThumbnail: Bitmap?,
-    onClick: (String, String) -> Unit
+    onClick: (String, String) -> Unit,
+    requestThumbnail: (String, String) -> Unit
 ) {
     val postDate = postData.postDate
     val postID = postData.postID
     val postTag = postData.postTag
     val postTitle = postData.postTitle
+    val postURL = postData.postURL
+
+    LaunchedEffect(postURL) {
+        requestThumbnail(postType, postURL)
+    }
 
     Row(
         modifier = modifier
