@@ -2,7 +2,6 @@ package com.yong.blog.list.viewmodel
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yong.blog.R
@@ -12,10 +11,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
+
+data class ListUiState(
+    val appBarTitle: Int? = null,
+    val isLoading: Boolean = true,
+    val postList: PostList? = null,
+    val postThumbnailMap: Map<String, Bitmap?> = emptyMap()
+)
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
@@ -29,34 +35,27 @@ class ListViewModel @Inject constructor(
         )
     }
 
-    private val _appBarTitle = MutableStateFlow<Int>(R.string.app_name)
-    val appBarTitle: StateFlow<Int> = _appBarTitle.asStateFlow()
-
-    private val _postList = MutableStateFlow<PostList?>(null)
-    val postList: StateFlow<PostList?> = _postList.asStateFlow()
-
-    private val _thumbnailMap = MutableStateFlow<Map<String, Bitmap?>>(emptyMap())
-    val thumbnailMap: StateFlow<Map<String, Bitmap?>> = _thumbnailMap.asStateFlow()
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    private val _uiState = MutableStateFlow(ListUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun getAppBarTitle(type: String) {
-        _appBarTitle.value = POST_TYPE_RESOURCE_MAP[type]!!
+        _uiState.update { it.copy(appBarTitle = POST_TYPE_RESOURCE_MAP[type]) }
     }
 
     fun getPostList(type: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.value = true
+            _uiState.update { it.copy(isLoading = true) }
 
             try {
                 val postList = repository.getPostList(type)
-                _postList.value = postList
+                _uiState.update { it.copy(
+                    isLoading = false,
+                    postList = postList
+                ) }
             } catch(e: Exception) {
                 // TODO: Error Handling
                 e.printStackTrace()
-            } finally {
-                _isLoading.value = false
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
@@ -75,7 +74,7 @@ class ListViewModel @Inject constructor(
                 }
             }
 
-            _thumbnailMap.value += (id to thumbnailBitmap)
+            _uiState.update { it.copy(postThumbnailMap = it.postThumbnailMap + (id to thumbnailBitmap)) }
         }
     }
 }

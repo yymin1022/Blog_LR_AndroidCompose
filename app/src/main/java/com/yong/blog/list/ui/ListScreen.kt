@@ -49,10 +49,11 @@ fun ListScreen(
     onNavigateToMain: () -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
-    val appBarTitle by viewModel.appBarTitle.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val postList by viewModel.postList.collectAsState()
-    val thumbnailMap by viewModel.thumbnailMap.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
+    val appBarTitle = uiState.appBarTitle
+    val isLoading = uiState.isLoading
+    val postList = uiState.postList
+    val thumbnailMap = uiState.postThumbnailMap
 
     LaunchedEffect(postType) { viewModel.getAppBarTitle(postType) }
 
@@ -61,7 +62,7 @@ fun ListScreen(
         topBar = {
             BlogAppBar(
                 modifier = Modifier,
-                titleText = String.format(stringResource(R.string.list_appbar_title), stringResource(appBarTitle)),
+                titleText = String.format(stringResource(R.string.list_appbar_title), appBarTitle?.let { stringResource(it) } ?: ""),
                 navigationIcon = {
                     IconButton(
                         onClick = onNavigateToMain
