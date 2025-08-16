@@ -273,7 +273,7 @@ private fun PostListItemTextTag(
     Text(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
-        text = postTag.toString(),
+        text = postTag.joinToString(separator = " ") { "#$it" },
         fontSize = 10.sp,
         style = TextStyle(
             color = Color.Gray
