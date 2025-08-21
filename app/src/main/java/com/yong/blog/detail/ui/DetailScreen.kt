@@ -1,6 +1,7 @@
 package com.yong.blog.detail.ui
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -75,7 +76,8 @@ fun DetailScreen(
                 .padding(innerPadding),
             isLoading = isLoading,
             postData = postData,
-            postImageMap = postImageMap
+            postImageMap = postImageMap,
+            requestPostImage = viewModel::getPostImage
         )
     }
 }
@@ -85,7 +87,8 @@ private fun DetailScreenBody(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
     postData: PostData?,
-    postImageMap: Map<String, Bitmap?>
+    postImageMap: Map<String, Bitmap?>,
+    requestPostImage: (String, String, String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -97,13 +100,77 @@ private fun DetailScreenBody(
                 val postTag = postData.postTag
                 val postTitle = postData.postTitle
 
-                Text("Title [$postTitle]")
-                Text("Date [$postDate]")
-                Text("Tags [$postTag]")
-                Text("=== Content ===\n$postContent")
+                PostTitle(
+                    modifier = Modifier,
+                    title = postTitle
+                )
+                PostDate(
+                    modifier = Modifier,
+                    date = postDate
+                )
+                PostTag(
+                    modifier = Modifier,
+                    tagList = postTag
+                )
+                PostContent(
+                    modifier = Modifier,
+                    contentMarkdown = postContent,
+                    postImageMap = postImageMap,
+                    requestPostImage = requestPostImage
+                )
             }
         } else {
             CircularProgressIndicator()
         }
+    }
+}
+
+@Composable
+private fun PostDate(
+    modifier: Modifier = Modifier,
+    date: String
+) {
+    Box(
+        modifier = modifier
+    ) {
+        Text("Date [$date]")
+    }
+}
+
+@Composable
+private fun PostTag(
+    modifier: Modifier = Modifier,
+    tagList: List<String>
+) {
+    Box(
+        modifier = modifier
+    ) {
+        Text("Tags [$tagList]")
+    }
+}
+
+@Composable
+private fun PostTitle(
+    modifier: Modifier = Modifier,
+    title: String
+) {
+    Box(
+        modifier = modifier
+    ) {
+        Text("Title [$title]")
+    }
+}
+
+@Composable
+private fun PostContent(
+    modifier: Modifier = Modifier,
+    contentMarkdown: String,
+    postImageMap: Map<String, Bitmap?>,
+    requestPostImage: (String, String, String) -> Unit
+) {
+    Box(
+        modifier = modifier
+    ) {
+        Text("=== Content ===\n$contentMarkdown")
     }
 }
