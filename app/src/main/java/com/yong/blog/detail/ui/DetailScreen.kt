@@ -1,9 +1,13 @@
 package com.yong.blog.detail.ui
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
@@ -90,8 +94,11 @@ private fun DetailScreenBody(
     postImageMap: Map<String, Bitmap?>,
     requestPostImage: (String, String, String) -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
+            .verticalScroll(scrollState)
     ) {
         if(!isLoading) {
             if(postData != null) {
