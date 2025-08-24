@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.common.ui.BlogAppBar
+import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.detail.viewmodel.DetailViewModel
 import com.yong.blog.domain.model.PostData
 
@@ -125,7 +126,7 @@ private fun DetailScreenBody(
                 )
             }
         } else {
-            CircularProgressIndicator()
+            BlogLoadingIndicator(modifier = Modifier)
         }
     }
 }
