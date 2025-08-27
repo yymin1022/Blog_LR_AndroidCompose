@@ -1,8 +1,10 @@
 package com.yong.blog.detail.ui
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -167,10 +169,20 @@ private fun PostTag(
     modifier: Modifier = Modifier,
     tagList: List<String>
 ) {
-    Box(
+    Row(
         modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.Center,
     ) {
-        Text("Tags [$tagList]")
+        tagList.forEach { tag ->
+            Text(
+                modifier = Modifier.padding(horizontal = 2.dp),
+                text = "#$tag",
+                color = Color.Gray,
+                fontSize = 14.sp
+            )
+        }
     }
 }
 
