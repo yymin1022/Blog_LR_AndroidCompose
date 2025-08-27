@@ -2,6 +2,7 @@
     <string name="app_name">Blog_LR</string>
 
     <string name="list_appbar_title">All Posts - %s</string>
+    <string name="detail_appbar_title">View Post</string>
 
     <string name="post_type_blog">Blog</string>
     <string name="post_type_project">Project</string>
