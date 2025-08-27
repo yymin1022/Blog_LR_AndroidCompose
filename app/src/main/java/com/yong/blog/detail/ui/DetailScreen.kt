@@ -150,13 +150,14 @@ private fun PostDate(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(bottom = 4.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = date,
             color = Color.DarkGray,
-            fontSize = 16.sp
+            fontSize = 14.sp
         )
     }
 }
@@ -200,8 +201,13 @@ private fun PostContent(
 ) {
     Box(
         modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
-        Text("=== Content ===\n$contentMarkdown")
+        Text(
+            text = contentMarkdown,
+            fontSize = 16.sp
+        )
     }
 }
 
