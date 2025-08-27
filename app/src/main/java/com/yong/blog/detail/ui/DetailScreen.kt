@@ -117,15 +117,15 @@ private fun DetailScreenBody(
                     modifier = Modifier,
                     date = postDate
                 )
-                PostTag(
-                    modifier = Modifier,
-                    tagList = postTag
-                )
                 PostContent(
                     modifier = Modifier,
                     contentMarkdown = postContent,
                     postImageMap = postImageMap,
                     requestPostImage = requestPostImage
+                )
+                PostTag(
+                    modifier = Modifier,
+                    tagList = postTag
                 )
             }
         } else {
