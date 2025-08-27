@@ -166,7 +166,7 @@ private fun PostTitle(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 24.dp, bottom = 8.dp),
+            .padding(top = 24.dp, bottom = 4.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
