@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -216,9 +217,10 @@ private fun PostContent(
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
-        Text(
-            text = contentMarkdown,
-            fontSize = 16.sp
+        MarkdownContent(
+            modifier = Modifier
+                .fillMaxSize(),
+            markdownContent = contentMarkdown
         )
     }
 }
