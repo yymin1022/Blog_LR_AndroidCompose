@@ -161,7 +161,9 @@ private fun PostContent(
         MarkdownContent(
             modifier = Modifier
                 .fillMaxSize(),
-            markdownContent = contentMarkdown
+            markdownContent = contentMarkdown,
+            postImageMap = postImageMap,
+            requestPostImage = requestPostImage
         )
     }
 }
