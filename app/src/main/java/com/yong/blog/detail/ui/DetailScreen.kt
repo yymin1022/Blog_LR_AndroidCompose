@@ -160,8 +160,7 @@ private fun PostContent(
             .padding(horizontal = 8.dp, vertical = 8.dp)
     ) {
         MarkdownContent(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier,
             markdownContent = contentMarkdown,
             postImageMap = postImageMap,
             requestPostImage = requestPostImage

@@ -1,6 +1,7 @@
 package com.yong.blog.detail.ui
 
 import android.graphics.Bitmap
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.mikepenz.markdown.compose.Markdown
@@ -18,7 +19,8 @@ fun MarkdownContent(
     val markdownState = rememberMarkdownState(markdownContent)
 
     Markdown(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxSize(),
         markdownState = markdownState,
         colors = markdownColor(),
         typography = markdownTypography()
