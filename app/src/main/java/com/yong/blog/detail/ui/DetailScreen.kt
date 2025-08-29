@@ -88,7 +88,7 @@ fun DetailScreen(
             isLoading = isLoading,
             postData = postData,
             postImageMap = postImageMap,
-            requestPostImage = viewModel::getPostImage
+            requestPostImage = { postUrl, srcID -> viewModel.getPostImage(postType, postUrl, srcID) }
         )
     }
 }
@@ -99,7 +99,7 @@ private fun DetailScreenBody(
     isLoading: Boolean,
     postData: PostData?,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String, String, String) -> Unit
+    requestPostImage: (String, String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -114,6 +114,7 @@ private fun DetailScreenBody(
                 val postDate = postData.postDate
                 val postTag = postData.postTag
                 val postTitle = postData.postTitle
+                val postUrl = postData.postUrl
 
                 PostTitle(
                     modifier = Modifier,
@@ -130,7 +131,7 @@ private fun DetailScreenBody(
                     modifier = Modifier,
                     contentMarkdown = postContent,
                     postImageMap = postImageMap,
-                    requestPostImage = requestPostImage
+                    requestPostImage = { srcID -> requestPostImage(postUrl, srcID) }
                 )
                 PostContentDivider(
                     modifier = Modifier
@@ -151,7 +152,7 @@ private fun PostContent(
     modifier: Modifier = Modifier,
     contentMarkdown: String,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String, String, String) -> Unit
+    requestPostImage: (String) -> Unit
 ) {
     Box(
         modifier = modifier

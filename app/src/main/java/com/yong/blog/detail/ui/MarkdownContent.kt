@@ -13,7 +13,7 @@ fun MarkdownContent(
     modifier: Modifier = Modifier,
     markdownContent: String,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String, String, String) -> Unit
+    requestPostImage: (String) -> Unit
 ) {
     val markdownState = rememberMarkdownState(markdownContent)
 
