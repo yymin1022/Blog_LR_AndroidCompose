@@ -106,7 +106,7 @@ private fun DetailScreenBody(
     Column(
         modifier = modifier
             .verticalScroll(scrollState)
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         if(!isLoading) {
             if(postData != null) {
@@ -156,7 +156,7 @@ private fun PostContent(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
+            .padding(horizontal = 8.dp, vertical = 8.dp)
     ) {
         MarkdownContent(
             modifier = Modifier
@@ -173,7 +173,7 @@ private fun PostContentDivider(
     HorizontalDivider(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(vertical = 16.dp)
     )
 }
 
@@ -184,8 +184,7 @@ private fun PostDate(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 4.dp),
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -204,7 +203,7 @@ private fun PostTag(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+            .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.Center,
     ) {
         tagList.forEach { tag ->
@@ -226,7 +225,7 @@ private fun PostTitle(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 4.dp),
+            .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
