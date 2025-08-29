@@ -147,6 +147,37 @@ private fun DetailScreenBody(
 }
 
 @Composable
+private fun PostContent(
+    modifier: Modifier = Modifier,
+    contentMarkdown: String,
+    postImageMap: Map<String, Bitmap?>,
+    requestPostImage: (String, String, String) -> Unit
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+    ) {
+        MarkdownContent(
+            modifier = Modifier
+                .fillMaxSize(),
+            markdownContent = contentMarkdown
+        )
+    }
+}
+
+@Composable
+private fun PostContentDivider(
+    modifier: Modifier = Modifier
+) {
+    HorizontalDivider(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+    )
+}
+
+@Composable
 private fun PostDate(
     modifier: Modifier = Modifier,
     date: String
@@ -203,35 +234,4 @@ private fun PostTitle(
             fontSize = 20.sp
         )
     }
-}
-
-@Composable
-private fun PostContent(
-    modifier: Modifier = Modifier,
-    contentMarkdown: String,
-    postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String, String, String) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
-    ) {
-        MarkdownContent(
-            modifier = Modifier
-                .fillMaxSize(),
-            markdownContent = contentMarkdown
-        )
-    }
-}
-
-@Composable
-private fun PostContentDivider(
-    modifier: Modifier = Modifier
-) {
-    HorizontalDivider(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-    )
 }
