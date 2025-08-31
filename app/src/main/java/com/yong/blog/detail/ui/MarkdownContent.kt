@@ -1,13 +1,14 @@
 package com.yong.blog.detail.ui
 
 import android.graphics.Bitmap
+import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.mikepenz.markdown.compose.Markdown
-import com.mikepenz.markdown.m3.markdownColor
-import com.mikepenz.markdown.m3.markdownTypography
-import com.mikepenz.markdown.model.rememberMarkdownState
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import io.noties.markwon.Markwon
 
 @Composable
 fun MarkdownContent(
@@ -16,13 +17,19 @@ fun MarkdownContent(
     postImageMap: Map<String, Bitmap?>,
     requestPostImage: (String) -> Unit
 ) {
-    val markdownState = rememberMarkdownState(markdownContent)
+    val context = LocalContext.current
+    val markwon = Markwon.builder(context).build()
 
-    Markdown(
+    AndroidView(
         modifier = modifier
             .fillMaxSize(),
-        markdownState = markdownState,
-        colors = markdownColor(),
-        typography = markdownTypography()
+        factory = { ctx ->
+            TextView(ctx).apply {
+                setTextColor(Color.Black.hashCode())
+            }
+        },
+        update = {
+            it.text = markwon.toMarkdown(markdownContent)
+        }
     )
 }
