@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.widget.TextView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -18,7 +19,9 @@ fun MarkdownContent(
     requestPostImage: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val markwon = Markwon.builder(context).build()
+    val markwon = remember {
+        Markwon.builder(context).build()
+    }
 
     AndroidView(
         modifier = modifier
