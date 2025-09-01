@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import io.noties.markwon.Markwon
+import io.noties.markwon.html.HtmlPlugin
 
 @Composable
 fun MarkdownContent(
@@ -20,7 +21,9 @@ fun MarkdownContent(
 ) {
     val context = LocalContext.current
     val markwon = remember {
-        Markwon.builder(context).build()
+        Markwon.builder(context)
+            .usePlugin(HtmlPlugin.create())
+            .build()
     }
 
     AndroidView(
