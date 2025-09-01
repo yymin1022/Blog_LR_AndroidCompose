@@ -52,7 +52,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation(libs.markwon)
+    implementation(libs.markwon.core)
+    implementation(libs.markwon.html)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
