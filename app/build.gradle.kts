@@ -54,6 +54,7 @@ dependencies {
 
     implementation(libs.markwon.core)
     implementation(libs.markwon.html)
+    implementation(libs.markwon.syntax.highlight)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
