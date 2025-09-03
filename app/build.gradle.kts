@@ -54,7 +54,9 @@ dependencies {
 
     implementation(libs.markwon.core)
     implementation(libs.markwon.html)
-    implementation(libs.markwon.syntax.highlight)
+    implementation(libs.markwon.syntax.highlight) {
+        exclude(group = "org.jetbrains", module = "annotations-java5")
+    }
     implementation(libs.prism4j.languages)
 
     implementation(libs.androidx.core.ktx)
