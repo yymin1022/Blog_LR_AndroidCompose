@@ -1,4 +1,4 @@
-package com.yong.blog.detail.ui
+package com.yong.blog.detail.ui.markdown
 
 import android.graphics.Bitmap
 import android.widget.TextView
