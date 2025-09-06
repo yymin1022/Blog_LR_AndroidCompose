@@ -23,13 +23,25 @@ fun MarkdownContent(
     postImageMap: Map<String, Bitmap?>,
     requestPostImage: (String) -> Unit
 ) {
-    val context = LocalContext.current
-
     val prism4j = remember { Prism4j(Prism4jGrammarLocator()) }
-    val markwon = remember {
+    val syntaxHighlightPlugin = remember(prism4j) {
+        SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create())
+    }
+
+    val context = LocalContext.current
+    val markwon = remember(postImageMap) {
+        val imageHandler = ImageTagHandler(
+            context = context,
+            imageWidth = 200,
+            getPostImage = { srcID -> postImageMap[srcID] },
+            requestPostImage = requestPostImage
+        )
+
         Markwon.builder(context)
-            .usePlugin(HtmlPlugin.create())
-            .usePlugin(SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create()))
+            .usePlugin(syntaxHighlightPlugin)
+            .usePlugin(HtmlPlugin.create { plugin ->
+                plugin.addHandler(imageHandler)
+            })
             .build()
     }
 
