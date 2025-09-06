@@ -47,6 +47,8 @@ class DetailViewModel @Inject constructor(
 
     fun getPostImage(type: String, id: String, srcID: String) {
         viewModelScope.launch {
+            _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to null)) }
+
             val postImage = repository.getPostImage(type, id, srcID)
             val postImageBitmap = postImage.base64Str.let { base64Str ->
                 try {

@@ -34,7 +34,11 @@ fun MarkdownContent(
             context = context,
             imageWidth = 200,
             getPostImage = { srcID -> postImageMap[srcID] },
-            requestPostImage = requestPostImage
+            requestPostImage = { srcID ->
+                if(!postImageMap.containsKey(srcID)) {
+                    requestPostImage(srcID)
+                }
+            }
         )
 
         Markwon.builder(context)
