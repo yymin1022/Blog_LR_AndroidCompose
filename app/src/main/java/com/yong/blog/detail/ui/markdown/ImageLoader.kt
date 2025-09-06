@@ -11,7 +11,7 @@ import io.noties.markwon.html.tag.SimpleTagHandler
 
 class ImageTagHandler(
     private val context: Context,
-    private val imageWidth: Int,
+    private val imageHeight: Int,
     private val getPostImage: (srcID: String) -> Bitmap?,
     private val requestPostImage: (String) -> Unit
 ): SimpleTagHandler() {
@@ -33,8 +33,8 @@ class ImageTagHandler(
         val origWidth = imageDrawable.intrinsicWidth
 
         if(origWidth > 0) {
-            val newHeight = (imageWidth.toFloat() / origWidth * origHeight).toInt()
-            imageDrawable.setBounds(0, 0, imageWidth, newHeight)
+            val newWidth = (imageHeight.toFloat() / origHeight * origWidth).toInt()
+            imageDrawable.setBounds(0, 0, newWidth, imageHeight)
         }
 
         return ImageSpan(imageDrawable)

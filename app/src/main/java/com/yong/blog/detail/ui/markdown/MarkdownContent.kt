@@ -32,7 +32,7 @@ fun MarkdownContent(
     val markwon = remember(postImageMap) {
         val imageHandler = ImageTagHandler(
             context = context,
-            imageWidth = 200,
+            imageHeight = 700,
             getPostImage = { srcID -> postImageMap[srcID] },
             requestPostImage = { srcID ->
                 if(!postImageMap.containsKey(srcID)) {
