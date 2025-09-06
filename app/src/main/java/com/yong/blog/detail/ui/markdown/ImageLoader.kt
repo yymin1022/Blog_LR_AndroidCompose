@@ -1,4 +1,46 @@
 package com.yong.blog.detail.ui.markdown
 
-class ImageLoader {
+import android.content.Context
+import android.graphics.Bitmap
+import android.text.style.ImageSpan
+import androidx.core.graphics.drawable.toDrawable
+import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.RenderProps
+import io.noties.markwon.html.HtmlTag
+import io.noties.markwon.html.tag.SimpleTagHandler
+
+class ImageTagHandler(
+    private val context: Context,
+    private val imageWidth: Int,
+    private val getPostImage: (srcID: String) -> Bitmap?,
+    private val requestPostImage: (String) -> Unit
+): SimpleTagHandler() {
+    override fun getSpans(
+        configuration: MarkwonConfiguration,
+        renderProps: RenderProps,
+        tag: HtmlTag
+    ): Any? {
+        val srcID = tag.attributes()["src"] ?: return null
+        val imageBitmap = getPostImage(srcID)
+
+        if(imageBitmap == null) {
+            requestPostImage(srcID)
+            return null
+        }
+
+        val imageDrawable = imageBitmap.toDrawable(context.resources)
+        val origHeight = imageDrawable.intrinsicHeight
+        val origWidth = imageDrawable.intrinsicWidth
+
+        if(origWidth > 0) {
+            val newHeight = (imageWidth.toFloat() / origWidth * origHeight).toInt()
+            imageDrawable.setBounds(0, 0, imageWidth, newHeight)
+        }
+
+        return ImageSpan(imageDrawable)
+    }
+
+    override fun supportedTags(): Collection<String> {
+        return setOf("img")
+    }
 }
