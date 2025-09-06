@@ -2,6 +2,8 @@ package com.yong.blog.detail.ui.markdown
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.text.Layout
+import android.text.style.AlignmentSpan
 import android.text.style.ImageSpan
 import androidx.core.graphics.drawable.toDrawable
 import io.noties.markwon.MarkwonConfiguration
@@ -37,7 +39,10 @@ class ImageTagHandler(
             imageDrawable.setBounds(0, 0, newWidth, imageHeight)
         }
 
-        return ImageSpan(imageDrawable)
+        return arrayOf(
+            ImageSpan(imageDrawable),
+            AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)
+        )
     }
 
     override fun supportedTags(): Collection<String> {
