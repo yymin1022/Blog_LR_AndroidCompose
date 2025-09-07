@@ -26,6 +26,10 @@ data class DetailUiState(
 class DetailViewModel @Inject constructor(
     private val repository: PostDetailRepository
 ): ViewModel() {
+    companion object {
+        private const val BITMAP_DOWNSCALE_WIDTH = 320
+    }
+
     private val _uiState = MutableStateFlow(DetailUiState())
     val uiState = _uiState.asStateFlow()
 
@@ -53,7 +57,12 @@ class DetailViewModel @Inject constructor(
             val postImageBitmap = postImage.base64Str.let { base64Str ->
                 try {
                     val imageBytes = Base64.decode(base64Str)
+
                     val bitmapOptions = BitmapFactory.Options()
+                    bitmapOptions.inJustDecodeBounds = true
+                    BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
+                    bitmapOptions.inSampleSize = downscaleBitmap(bitmapOptions)
+                    bitmapOptions.inJustDecodeBounds = false
                     BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size, bitmapOptions)
                 } catch (e: IllegalArgumentException) {
                     e.printStackTrace()
@@ -63,5 +72,19 @@ class DetailViewModel @Inject constructor(
 
             _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to postImageBitmap)) }
         }
+    }
+
+    private fun downscaleBitmap(options: BitmapFactory.Options): Int {
+        val origWidth: Int = options.outWidth
+        var inSampleSize = 1
+
+        if(origWidth > BITMAP_DOWNSCALE_WIDTH) {
+            val halfWidth: Int = origWidth / 2
+            while((halfWidth / inSampleSize) >= origWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
     }
 }
