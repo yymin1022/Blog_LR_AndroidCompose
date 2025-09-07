@@ -32,6 +32,7 @@ import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.detail.ui.markdown.MarkdownContent
 import com.yong.blog.detail.viewmodel.DetailViewModel
+import com.yong.blog.detail.viewmodel.MarkdownElement
 import com.yong.blog.domain.model.PostData
 
 @Composable
@@ -48,6 +49,7 @@ fun DetailScreen(
     val isLoading = uiState.isLoading
     val postData = uiState.postData
     val postImageMap = uiState.postImageMap
+    val postMarkdownContent = uiState.postMarkdownContent
 
     LaunchedEffect(postType, postID) {
         viewModel.getPostData(postType, postID)
@@ -88,6 +90,7 @@ fun DetailScreen(
             isLoading = isLoading,
             postData = postData,
             postImageMap = postImageMap,
+            postMarkdownContent = postMarkdownContent,
             requestPostImage = { postUrl, srcID -> viewModel.getPostImage(postType, postUrl, srcID) }
         )
     }
@@ -99,6 +102,7 @@ private fun DetailScreenBody(
     isLoading: Boolean,
     postData: PostData?,
     postImageMap: Map<String, Bitmap?>,
+    postMarkdownContent: List<MarkdownElement>,
     requestPostImage: (String, String) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -110,7 +114,6 @@ private fun DetailScreenBody(
     ) {
         if(!isLoading) {
             if(postData != null) {
-                val postContent = postData.postContent
                 val postDate = postData.postDate
                 val postTag = postData.postTag
                 val postTitle = postData.postTitle
@@ -129,7 +132,7 @@ private fun DetailScreenBody(
                 )
                 PostContent(
                     modifier = Modifier,
-                    contentMarkdown = postContent,
+                    markdownContent = postMarkdownContent,
                     postImageMap = postImageMap,
                     requestPostImage = { srcID -> requestPostImage(postUrl, srcID) }
                 )
@@ -150,7 +153,7 @@ private fun DetailScreenBody(
 @Composable
 private fun PostContent(
     modifier: Modifier = Modifier,
-    contentMarkdown: String,
+    markdownContent: List<MarkdownElement>,
     postImageMap: Map<String, Bitmap?>,
     requestPostImage: (String) -> Unit
 ) {
@@ -161,7 +164,7 @@ private fun PostContent(
     ) {
         MarkdownContent(
             modifier = Modifier,
-            markdownContent = contentMarkdown,
+            markdownContent = markdownContent,
             postImageMap = postImageMap,
             requestPostImage = requestPostImage
         )
