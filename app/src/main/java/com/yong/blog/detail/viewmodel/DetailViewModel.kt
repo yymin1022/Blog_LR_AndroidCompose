@@ -15,11 +15,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.io.encoding.Base64
 
+sealed class MarkdownElement {
+    data class Image(val srcID: String): MarkdownElement()
+    data class Text(val markdownContent: String): MarkdownElement()
+}
+
 data class DetailUiState(
     val appBarTitle: Int = R.string.detail_appbar_title,
     val isLoading: Boolean = true,
     val postData: PostData? = null,
-    val postImageMap: Map<String, Bitmap?> = emptyMap()
+    val postImageMap: Map<String, Bitmap?> = emptyMap(),
+    val postMarkdownContent: List<MarkdownElement> = emptyList()
 )
 
 @HiltViewModel
@@ -38,8 +44,14 @@ class DetailViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
 
             try {
-                val postDate = repository.getPostData(type, id)
-                _uiState.update { it.copy(postData = postDate) }
+                val postData = repository.getPostData(type, id)
+                val postMarkdownContent = parseMarkdown(postData.postContent)
+                _uiState.update {
+                    it.copy(
+                        postData = postData,
+                        postMarkdownContent = postMarkdownContent
+                    )
+                }
             } catch(e: Exception) {
                 // TODO: Error Handling
                 e.printStackTrace()
@@ -47,6 +59,31 @@ class DetailViewModel @Inject constructor(
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
+    }
+
+    private fun parseMarkdown(markdownContent: String): List<MarkdownElement> {
+        val imageRegex = Regex("!\\[(.*?)\\]\\((.*?)\\)|<img.*?src=\"(.*?)\".*?>")
+
+        var prevIdx = 0
+        val parseRes = mutableListOf<MarkdownElement>()
+        imageRegex.findAll(markdownContent).forEach { matchRes ->
+            val textContent = markdownContent.substring(prevIdx, matchRes.range.first)
+            if(textContent.isNotEmpty()) {
+                parseRes.add(MarkdownElement.Text(textContent))
+            }
+
+            val srcID = matchRes.groupValues[2].ifEmpty { matchRes.groupValues[3] }
+            parseRes.add(MarkdownElement.Image(srcID))
+
+            prevIdx = matchRes.range.last + 1
+        }
+
+        if(prevIdx < markdownContent.length) {
+            val textContent = markdownContent.substring(prevIdx)
+            parseRes.add(MarkdownElement.Text(textContent))
+        }
+
+        return parseRes
     }
 
     fun getPostImage(type: String, id: String, srcID: String) {
