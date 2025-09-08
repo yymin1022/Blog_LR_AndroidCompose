@@ -62,7 +62,7 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun parseMarkdown(markdownContent: String): List<MarkdownElement> {
-        val imageRegex = Regex("!\\[(.*?)\\]\\((.*?)\\)|<img.*?src=\"(.*?)\".*?>")
+        val imageRegex = Regex("""!\[(.*?)]\((.*?)\)|<img.*?src="(.*?)".*?>""")
 
         var prevIdx = 0
         val parseRes = mutableListOf<MarkdownElement>()
