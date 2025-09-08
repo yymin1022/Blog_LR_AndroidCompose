@@ -30,7 +30,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
+import com.yong.blog.detail.ui.markdown.MarkdownContent
 import com.yong.blog.detail.viewmodel.DetailViewModel
+import com.yong.blog.detail.viewmodel.MarkdownElement
 import com.yong.blog.domain.model.PostData
 
 @Composable
@@ -47,6 +49,7 @@ fun DetailScreen(
     val isLoading = uiState.isLoading
     val postData = uiState.postData
     val postImageMap = uiState.postImageMap
+    val postMarkdownContent = uiState.postMarkdownContent
 
     LaunchedEffect(postType, postID) {
         viewModel.getPostData(postType, postID)
@@ -87,7 +90,8 @@ fun DetailScreen(
             isLoading = isLoading,
             postData = postData,
             postImageMap = postImageMap,
-            requestPostImage = viewModel::getPostImage
+            postMarkdownContent = postMarkdownContent,
+            requestPostImage = { postUrl, srcID -> viewModel.getPostImage(postType, postUrl, srcID) }
         )
     }
 }
@@ -98,21 +102,22 @@ private fun DetailScreenBody(
     isLoading: Boolean,
     postData: PostData?,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String, String, String) -> Unit
+    postMarkdownContent: List<MarkdownElement>,
+    requestPostImage: (String, String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
     Column(
         modifier = modifier
             .verticalScroll(scrollState)
-            .padding(8.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         if(!isLoading) {
             if(postData != null) {
-                val postContent = postData.postContent
                 val postDate = postData.postDate
                 val postTag = postData.postTag
                 val postTitle = postData.postTitle
+                val postUrl = postData.postUrl
 
                 PostTitle(
                     modifier = Modifier,
@@ -127,9 +132,9 @@ private fun DetailScreenBody(
                 )
                 PostContent(
                     modifier = Modifier,
-                    contentMarkdown = postContent,
+                    markdownContent = postMarkdownContent,
                     postImageMap = postImageMap,
-                    requestPostImage = requestPostImage
+                    requestPostImage = { srcID -> requestPostImage(postUrl, srcID) }
                 )
                 PostContentDivider(
                     modifier = Modifier
@@ -146,14 +151,45 @@ private fun DetailScreenBody(
 }
 
 @Composable
+private fun PostContent(
+    modifier: Modifier = Modifier,
+    markdownContent: List<MarkdownElement>,
+    postImageMap: Map<String, Bitmap?>,
+    requestPostImage: (String) -> Unit
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 8.dp)
+    ) {
+        MarkdownContent(
+            modifier = Modifier,
+            markdownContent = markdownContent,
+            postImageMap = postImageMap,
+            requestPostImage = requestPostImage
+        )
+    }
+}
+
+@Composable
+private fun PostContentDivider(
+    modifier: Modifier = Modifier
+) {
+    HorizontalDivider(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    )
+}
+
+@Composable
 private fun PostDate(
     modifier: Modifier = Modifier,
     date: String
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 4.dp),
+            .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -172,7 +208,7 @@ private fun PostTag(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+            .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.Center,
     ) {
         tagList.forEach { tag ->
@@ -194,7 +230,7 @@ private fun PostTitle(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 4.dp),
+            .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -202,34 +238,4 @@ private fun PostTitle(
             fontSize = 20.sp
         )
     }
-}
-
-@Composable
-private fun PostContent(
-    modifier: Modifier = Modifier,
-    contentMarkdown: String,
-    postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String, String, String) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 8.dp)
-    ) {
-        Text(
-            text = contentMarkdown,
-            fontSize = 16.sp
-        )
-    }
-}
-
-@Composable
-private fun PostContentDivider(
-    modifier: Modifier = Modifier
-) {
-    HorizontalDivider(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-    )
 }
