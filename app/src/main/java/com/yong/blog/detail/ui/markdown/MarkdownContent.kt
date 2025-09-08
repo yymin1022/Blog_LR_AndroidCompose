@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -110,7 +111,11 @@ private fun MarkdownContentText(
 ) {
     AndroidView(
         modifier = modifier,
-        factory = { ctx -> TextView(ctx) },
+        factory = { ctx ->
+            TextView(ctx).apply {
+                setTextColor(Color.Black.hashCode())
+            }
+        },
         update = {
             it.text = markwon.toMarkdown(markdownContent)
         }
