@@ -3,7 +3,6 @@ package com.yong.blog.data.api.manager
 import com.yong.blog.data.api.dto.request.PostDataRequest
 import com.yong.blog.data.api.dto.request.PostImageRequest
 import com.yong.blog.data.api.dto.request.PostListRequest
-import com.yong.blog.data.api.dto.response.PostDataResponse
 import com.yong.blog.data.api.dto.response.toDomain
 import com.yong.blog.data.api.service.ApiService
 import com.yong.blog.domain.model.PostData
