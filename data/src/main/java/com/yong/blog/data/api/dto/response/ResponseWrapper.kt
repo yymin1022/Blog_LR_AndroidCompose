@@ -1,7 +1,9 @@
 package com.yong.blog.data.api.dto.response
 
+import com.google.gson.annotations.SerializedName
+
 data class ResponseWrapper<T>(
-    val RESULT_CODE: Int,
-    val RESULT_MSG: String,
-    val RESULT_DATA: T?
+    @SerializedName("RESULT_CODE") val resultCode: Int,
+    @SerializedName("RESULT_MSG") val resultMessage: String,
+    @SerializedName("RESULT_DATA") val resultData: T?
 )
