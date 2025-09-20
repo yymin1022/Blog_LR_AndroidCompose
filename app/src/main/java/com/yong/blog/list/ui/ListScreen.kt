@@ -36,7 +36,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
+import com.yong.blog.common.ui.BlogUiStatus
 import com.yong.blog.common.ui.theme.BlogBlue
+import com.yong.blog.common.ui.theme.BlogErrorIndicator
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 import com.yong.blog.list.viewmodel.ListViewModel
@@ -50,8 +52,9 @@ fun ListScreen(
     viewModel: ListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val uiStatus = uiState.uiStatus
+
     val appBarTitle = uiState.appBarTitle
-    val isLoading = uiState.isLoading
     val postList = uiState.postList
     val thumbnailMap = uiState.postThumbnailMap
 
@@ -83,9 +86,10 @@ fun ListScreen(
             modifier = Modifier
                 .padding(innerPadding),
             postType = postType,
-            isLoading = isLoading,
             postList = postList,
             thumbnailMap = thumbnailMap,
+            uiStatus = uiStatus,
+            requestPostList = { viewModel.getPostList(postType) },
             requestPostThumbnail = viewModel::requestPostThumbnail,
             onNavigateToDetail = onNavigateToDetail
         )
@@ -96,9 +100,10 @@ fun ListScreen(
 private fun ListScreenBody(
     modifier: Modifier = Modifier,
     postType: String,
-    isLoading: Boolean,
     postList: PostList?,
     thumbnailMap: Map<String, Bitmap?>,
+    uiStatus: BlogUiStatus,
+    requestPostList: () -> Unit,
     requestPostThumbnail: (String, String) -> Unit,
     onNavigateToDetail: (String, String) -> Unit
 ) {
@@ -107,17 +112,28 @@ private fun ListScreenBody(
             .fillMaxSize()
             .padding(vertical = 4.dp)
     ) {
-        if(!isLoading) {
-            PostList(
-                modifier = Modifier,
-                postType = postType,
-                postList = postList,
-                thumbnailMap = thumbnailMap,
-                requestPostThumbnail = requestPostThumbnail,
-                onNavigateToDetail = onNavigateToDetail
-            )
-        } else {
-            BlogLoadingIndicator(modifier = Modifier)
+        when(uiStatus) {
+            BlogUiStatus.UI_STATUS_ERROR -> {
+                BlogErrorIndicator(
+                    modifier = Modifier,
+                    onRetry = requestPostList
+                )
+            }
+
+            BlogUiStatus.UI_STATUS_LOADING -> {
+                BlogLoadingIndicator(modifier = Modifier)
+            }
+
+            BlogUiStatus.UI_STATUS_NORMAL -> {
+                PostList(
+                    modifier = Modifier,
+                    postType = postType,
+                    postList = postList,
+                    thumbnailMap = thumbnailMap,
+                    requestPostThumbnail = requestPostThumbnail,
+                    onNavigateToDetail = onNavigateToDetail
+                )
+            }
         }
     }
 }

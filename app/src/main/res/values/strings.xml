@@ -4,6 +4,9 @@
     <string name="list_appbar_title">All Posts - %s</string>
     <string name="detail_appbar_title">View Post</string>
 
+    <string name="common_error_message">Error Occurred</string>
+    <string name="common_error_retry">Retry</string>
+
     <string name="post_type_blog">Blog</string>
     <string name="post_type_project">Project</string>
     <string name="post_type_solving">Solving</string>
