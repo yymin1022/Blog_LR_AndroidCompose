@@ -1,4 +1,4 @@
-package com.yong.blog.common.util
+package com.yong.blog.common.network.util
 
 import android.content.Context
 import android.net.ConnectivityManager
