@@ -49,7 +49,7 @@ class DetailViewModel @Inject constructor(
 
             try {
                 val postData = repository.getPostData(type, id)
-                if(postData == null) throw PostException("PostList [$type] got error")
+                if(postData == null) throw PostException("PostData [$type] got error")
 
                 val postMarkdownContent = parseMarkdown(postData.postContent)
                 _uiState.update {
