@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yong.blog.R
+import com.yong.blog.common.ui.BlogUiStatus
 import com.yong.blog.domain.model.PostData
 import com.yong.blog.domain.repository.PostDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,10 +23,10 @@ sealed class MarkdownElement {
 
 data class DetailUiState(
     val appBarTitle: Int = R.string.detail_appbar_title,
-    val isLoading: Boolean = true,
     val postData: PostData? = null,
     val postImageMap: Map<String, Bitmap?> = emptyMap(),
-    val postMarkdownContent: List<MarkdownElement> = emptyList()
+    val postMarkdownContent: List<MarkdownElement> = emptyList(),
+    val uiStatus: BlogUiStatus = BlogUiStatus.UI_STATUS_NORMAL
 )
 
 @HiltViewModel
@@ -41,7 +42,7 @@ class DetailViewModel @Inject constructor(
 
     fun getPostData(type: String, id: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_LOADING) }
 
             try {
                 val postData = repository.getPostData(type, id)
@@ -49,14 +50,13 @@ class DetailViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(
                         postData = postData,
-                        postMarkdownContent = postMarkdownContent
+                        postMarkdownContent = postMarkdownContent,
+                        uiStatus = BlogUiStatus.UI_STATUS_NORMAL
                     )
                 }
             } catch(e: Exception) {
-                // TODO: Error Handling
                 e.printStackTrace()
-            } finally {
-                _uiState.update { it.copy(isLoading = false) }
+                _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_ERROR) }
             }
         }
     }

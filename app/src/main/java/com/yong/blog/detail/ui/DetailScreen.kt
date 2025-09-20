@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
+import com.yong.blog.common.ui.BlogUiStatus
+import com.yong.blog.common.ui.theme.BlogErrorIndicator
 import com.yong.blog.detail.ui.markdown.MarkdownContent
 import com.yong.blog.detail.viewmodel.DetailViewModel
 import com.yong.blog.detail.viewmodel.MarkdownElement
@@ -45,8 +48,9 @@ fun DetailScreen(
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val uiStatus = uiState.uiStatus
+
     val appBarTitle = uiState.appBarTitle
-    val isLoading = uiState.isLoading
     val postData = uiState.postData
     val postImageMap = uiState.postImageMap
     val postMarkdownContent = uiState.postMarkdownContent
@@ -87,10 +91,11 @@ fun DetailScreen(
         DetailScreenBody(
             modifier = Modifier
                 .padding(innerPadding),
-            isLoading = isLoading,
             postData = postData,
             postImageMap = postImageMap,
             postMarkdownContent = postMarkdownContent,
+            uiStatus = uiStatus,
+            requestPostData = { viewModel.getPostData(postType, postID) },
             requestPostImage = { postUrl, srcID -> viewModel.getPostImage(postType, postUrl, srcID) }
         )
     }
@@ -99,53 +104,73 @@ fun DetailScreen(
 @Composable
 private fun DetailScreenBody(
     modifier: Modifier = Modifier,
-    isLoading: Boolean,
     postData: PostData?,
     postImageMap: Map<String, Bitmap?>,
     postMarkdownContent: List<MarkdownElement>,
+    uiStatus: BlogUiStatus,
+    requestPostData: () -> Unit,
     requestPostImage: (String, String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
-    Column(
+    Box(
         modifier = modifier
-            .verticalScroll(scrollState)
-            .padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
-        if(!isLoading) {
-            if(postData != null) {
-                val postDate = postData.postDate
-                val postTag = postData.postTag
-                val postTitle = postData.postTitle
-                val postUrl = postData.postUrl
-
-                PostTitle(
-                    modifier = Modifier,
-                    title = postTitle
-                )
-                PostDate(
-                    modifier = Modifier,
-                    date = postDate
-                )
-                PostContentDivider(
+        when(uiStatus) {
+            BlogUiStatus.UI_STATUS_ERROR -> {
+                BlogErrorIndicator(
                     modifier = Modifier
-                )
-                PostContent(
-                    modifier = Modifier,
-                    markdownContent = postMarkdownContent,
-                    postImageMap = postImageMap,
-                    requestPostImage = { srcID -> requestPostImage(postUrl, srcID) }
-                )
-                PostContentDivider(
-                    modifier = Modifier
-                )
-                PostTag(
-                    modifier = Modifier,
-                    tagList = postTag
+                        .fillMaxSize(),
+                    onRetry = requestPostData
                 )
             }
-        } else {
-            BlogLoadingIndicator(modifier = Modifier)
+
+            BlogUiStatus.UI_STATUS_LOADING -> {
+                BlogLoadingIndicator(
+                    modifier = Modifier
+                        .fillMaxSize()
+                )
+            }
+
+            BlogUiStatus.UI_STATUS_NORMAL -> {
+                if(postData != null) {
+                    val postDate = postData.postDate
+                    val postTag = postData.postTag
+                    val postTitle = postData.postTitle
+                    val postUrl = postData.postUrl
+
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 16.dp, vertical = 16.dp)
+                    ) {
+                        PostTitle(
+                            modifier = Modifier,
+                            title = postTitle
+                        )
+                        PostDate(
+                            modifier = Modifier,
+                            date = postDate
+                        )
+                        PostContentDivider(
+                            modifier = Modifier
+                        )
+                        PostContent(
+                            modifier = Modifier,
+                            markdownContent = postMarkdownContent,
+                            postImageMap = postImageMap,
+                            requestPostImage = { srcID -> requestPostImage(postUrl, srcID) }
+                        )
+                        PostContentDivider(
+                            modifier = Modifier
+                        )
+                        PostTag(
+                            modifier = Modifier,
+                            tagList = postTag
+                        )
+                    }
+                }
+            }
         }
     }
 }
