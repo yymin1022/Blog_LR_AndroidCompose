@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yong.blog.R
+import com.yong.blog.common.ui.BlogUiStatus
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.repository.PostListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,9 +19,9 @@ import kotlin.io.encoding.Base64
 
 data class ListUiState(
     val appBarTitle: Int? = null,
-    val isLoading: Boolean = true,
     val postList: PostList? = null,
-    val postThumbnailMap: Map<String, Bitmap?> = emptyMap()
+    val postThumbnailMap: Map<String, Bitmap?> = emptyMap(),
+    val uiStatus: BlogUiStatus = BlogUiStatus.UI_STATUS_NORMAL
 )
 
 @HiltViewModel
@@ -44,18 +45,17 @@ class ListViewModel @Inject constructor(
 
     fun getPostList(type: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { it.copy(isLoading = true) }
+            _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_LOADING) }
 
             try {
                 val postList = repository.getPostList(type)
                 _uiState.update { it.copy(
-                    isLoading = false,
+                    uiStatus = BlogUiStatus.UI_STATUS_NORMAL,
                     postList = postList
                 ) }
             } catch(e: Exception) {
-                // TODO: Error Handling
                 e.printStackTrace()
-                _uiState.update { it.copy(isLoading = false) }
+                _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_ERROR) }
             }
         }
     }
