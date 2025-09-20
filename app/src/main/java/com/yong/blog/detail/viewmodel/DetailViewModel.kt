@@ -2,9 +2,11 @@ package com.yong.blog.detail.viewmodel
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yong.blog.R
+import com.yong.blog.common.exception.PostException
 import com.yong.blog.common.ui.BlogUiStatus
 import com.yong.blog.domain.model.PostData
 import com.yong.blog.domain.repository.PostDetailRepository
@@ -35,6 +37,7 @@ class DetailViewModel @Inject constructor(
 ): ViewModel() {
     companion object {
         private const val BITMAP_DOWNSCALE_WIDTH = 320
+        private const val LOG_TAG = "PostDetail ViewModel"
     }
 
     private val _uiState = MutableStateFlow(DetailUiState())
@@ -46,6 +49,8 @@ class DetailViewModel @Inject constructor(
 
             try {
                 val postData = repository.getPostData(type, id)
+                if(postData == null) throw PostException("PostList [$type] got error")
+
                 val postMarkdownContent = parseMarkdown(postData.postContent)
                 _uiState.update {
                     it.copy(
@@ -91,6 +96,11 @@ class DetailViewModel @Inject constructor(
             _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to null)) }
 
             val postImage = repository.getPostImage(type, id, srcID)
+            if(postImage == null) {
+                Log.e(LOG_TAG, "PostImage [$id] got error")
+                return@launch
+            }
+
             val postImageBitmap = postImage.base64Str.let { base64Str ->
                 try {
                     val imageBytes = Base64.decode(base64Str)

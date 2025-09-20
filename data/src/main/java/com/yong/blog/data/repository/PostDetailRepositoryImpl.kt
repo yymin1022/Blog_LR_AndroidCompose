@@ -11,11 +11,11 @@ class PostDetailRepositoryImpl(
     override suspend fun getPostData(
         type: String,
         id: String
-    ): PostData = apiManager.getPostData(type, id)
+    ): PostData? = apiManager.getPostData(type, id)
 
     override suspend fun getPostImage(
         type: String,
         id: String,
         srcID: String
-    ): PostImage = apiManager.getPostImage(type, id, srcID)
+    ): PostImage? = apiManager.getPostImage(type, id, srcID)
 }

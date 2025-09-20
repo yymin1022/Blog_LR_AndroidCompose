@@ -1,4 +1,4 @@
-package com.yong.blog.common.network.exception
+package com.yong.blog.common.exception
 
 import java.io.IOException
 

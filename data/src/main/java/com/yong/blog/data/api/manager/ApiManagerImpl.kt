@@ -13,13 +13,13 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
     override suspend fun getPostData(
         postType: String,
         postID: String
-    ): PostData {
+    ): PostData? {
         val requestDto = PostDataRequest(postID, postType)
         val responseDto = api.getPostData(requestDto)
 
         if(responseDto.resultCode != 200
             || responseDto.resultData == null) {
-            TODO("Error Handling")
+            return null
         }
 
         return responseDto.resultData.toDomain(postID)
@@ -29,25 +29,25 @@ class ApiManagerImpl(private val api: ApiService): ApiManager {
         postType: String,
         postID: String,
         srcID: String
-    ): PostImage {
+    ): PostImage? {
         val requestDto = PostImageRequest(postID, postType, srcID)
         val responseDto = api.getPostImage(requestDto)
 
         if(responseDto.resultCode != 200
             || responseDto.resultData == null) {
-            TODO("Error Handling")
+            return null
         }
 
         return responseDto.resultData.toDomain()
     }
 
-    override suspend fun getPostList(postType: String): PostList {
+    override suspend fun getPostList(postType: String): PostList? {
         val requestDto = PostListRequest(postType)
         val responseDto = api.getPostList(requestDto)
 
         if(responseDto.resultCode != 200
             || responseDto.resultData == null) {
-            TODO("Error Handling")
+            return null
         }
 
         return responseDto.resultData.toDomain()
