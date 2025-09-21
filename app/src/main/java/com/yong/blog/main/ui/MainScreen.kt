@@ -19,7 +19,8 @@ import com.yong.blog.common.ui.theme.BlogBlue
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    navigateToList: (String) -> Unit
+    navigateToList: (String) -> Unit,
+    navigateToDetail: (String, String) -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -28,7 +29,8 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            navigateToList = navigateToList
+            navigateToList = navigateToList,
+            navigateToDetail = navigateToDetail
         )
     }
 }
@@ -36,7 +38,8 @@ fun MainScreen(
 @Composable
 private fun MainScreenBody(
     modifier: Modifier = Modifier,
-    navigateToList: (String) -> Unit
+    navigateToList: (String) -> Unit,
+    navigateToDetail: (String, String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -58,7 +61,7 @@ private fun MainScreenBody(
         PostListButton(
             modifier = Modifier,
             title = "About",
-            onClick = { navigateToList("about") }
+            onClick = { navigateToDetail("about", "LR") }
         )
     }
 }

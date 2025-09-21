@@ -29,6 +29,11 @@ fun BlogNavHost(
                     navController.navigate(
                         route = BlogNavRoute.PostList(type)
                     )
+                },
+                navigateToDetail = { type, id ->
+                    navController.navigate(
+                        route = BlogNavRoute.PostDetail(type, id)
+                    )
                 }
             )
         }
