@@ -9,9 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.yong.blog.R
 import com.yong.blog.common.ui.theme.BlogBlue
 
 @Composable
@@ -70,14 +72,14 @@ private fun MainTitle(
             .padding(bottom = 20.dp)
     ) {
         MainTitleText(
-            title = "안녕하세요"
+            title = stringResource(R.string.main_title_1)
         )
         MainTitleText(
-            title = "1인개발자",
+            title = stringResource(R.string.main_title_2),
             titleColor = BlogBlue
         )
         MainTitleText(
-            title = "LR입니다"
+            title = stringResource(R.string.main_title_3)
         )
     }
 }
