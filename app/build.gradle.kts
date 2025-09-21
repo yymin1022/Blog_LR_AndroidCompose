@@ -7,6 +7,8 @@ plugins {
 
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
 android {

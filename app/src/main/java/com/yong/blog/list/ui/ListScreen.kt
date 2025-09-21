@@ -47,8 +47,8 @@ import com.yong.blog.list.viewmodel.ListViewModel
 fun ListScreen(
     modifier: Modifier = Modifier,
     postType: String,
-    onNavigateToDetail: (String, String) -> Unit,
-    onNavigateToMain: () -> Unit,
+    navigateToDetail: (String, String) -> Unit,
+    navigateToMain: () -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -71,7 +71,7 @@ fun ListScreen(
                 titleText = String.format(stringResource(R.string.list_appbar_title), appBarTitle?.let { stringResource(it) } ?: ""),
                 navigationIcon = {
                     IconButton(
-                        onClick = onNavigateToMain
+                        onClick = navigateToMain
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -91,7 +91,7 @@ fun ListScreen(
             uiStatus = uiStatus,
             requestPostList = { viewModel.getPostList(postType) },
             requestPostThumbnail = viewModel::requestPostThumbnail,
-            onNavigateToDetail = onNavigateToDetail
+            navigateToDetail = navigateToDetail
         )
     }
 }
@@ -105,7 +105,7 @@ private fun ListScreenBody(
     uiStatus: BlogUiStatus,
     requestPostList: () -> Unit,
     requestPostThumbnail: (String, String) -> Unit,
-    onNavigateToDetail: (String, String) -> Unit
+    navigateToDetail: (String, String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -131,7 +131,7 @@ private fun ListScreenBody(
                     postList = postList,
                     thumbnailMap = thumbnailMap,
                     requestPostThumbnail = requestPostThumbnail,
-                    onNavigateToDetail = onNavigateToDetail
+                    navigateToDetail = navigateToDetail
                 )
             }
         }
@@ -145,7 +145,7 @@ private fun PostList(
     postList: PostList?,
     thumbnailMap: Map<String, Bitmap?>,
     requestPostThumbnail: (String, String) -> Unit,
-    onNavigateToDetail: (String, String) -> Unit
+    navigateToDetail: (String, String) -> Unit
 ) {
     if(postList != null) {
         LazyColumn(
@@ -161,7 +161,7 @@ private fun PostList(
                     postType = postType,
                     postData = post,
                     postThumbnail = postThumbnail,
-                    onClick = onNavigateToDetail,
+                    onClick = navigateToDetail,
                     requestThumbnail = requestPostThumbnail
                 )
             }

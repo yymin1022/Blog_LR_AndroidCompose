@@ -43,8 +43,8 @@ fun DetailScreen(
     modifier: Modifier = Modifier,
     postType: String,
     postID: String,
-    onNavigateToList: () -> Unit,
-    onNavigateToMain: () -> Unit,
+    navigateToList: () -> Unit,
+    navigateToMain: () -> Unit,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -67,7 +67,7 @@ fun DetailScreen(
                 titleText = stringResource(appBarTitle),
                 navigationIcon = {
                     IconButton(
-                        onClick = onNavigateToList
+                        onClick = navigateToList
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -77,7 +77,7 @@ fun DetailScreen(
                 },
                 actionIcon = {
                     IconButton(
-                        onClick = onNavigateToMain
+                        onClick = navigateToMain
                     ) {
                         Icon(
                             imageVector = Icons.Default.Home,

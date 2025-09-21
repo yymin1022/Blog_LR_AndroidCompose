@@ -12,7 +12,7 @@ import com.yong.blog.common.ui.BlogAppBar
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    onNavigateToList: (String) -> Unit
+    navigateToList: (String) -> Unit
 ) {
     Scaffold(
         modifier = modifier,
@@ -25,7 +25,7 @@ fun MainScreen(
         MainScreenBody(
             modifier = Modifier
                 .padding(innerPadding),
-            onNavigateToList = onNavigateToList
+            navigateToList = navigateToList
         )
     }
 }
@@ -33,24 +33,24 @@ fun MainScreen(
 @Composable
 private fun MainScreenBody(
     modifier: Modifier = Modifier,
-    onNavigateToList: (String) -> Unit
+    navigateToList: (String) -> Unit
 ) {
     Column(
         modifier = modifier
     ) {
         Text("Main")
         Button(
-            onClick = { onNavigateToList("blog") }
+            onClick = { navigateToList("blog") }
         ){
             Text("Go to Blog List")
         }
         Button(
-            onClick = { onNavigateToList("project") }
+            onClick = { navigateToList("project") }
         ){
             Text("Go to Project List")
         }
         Button(
-            onClick = { onNavigateToList("about") }
+            onClick = { navigateToList("about") }
         ){
             Text("Go to About List")
         }
