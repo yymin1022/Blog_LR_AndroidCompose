@@ -39,7 +39,8 @@ fun BlogNavHost(
         }
 
         composable<BlogNavRoute.PostList> { backStack ->
-            val postType = backStack.toRoute<BlogNavRoute.PostList>().postType
+            val route = backStack.toRoute<BlogNavRoute.PostList>()
+            val postType = route.postType
 
             ListScreen(
                 modifier = Modifier
@@ -57,8 +58,9 @@ fun BlogNavHost(
         }
 
         composable<BlogNavRoute.PostDetail> { backStack ->
-            val postType = backStack.toRoute<BlogNavRoute.PostDetail>().postType
-            val postID = backStack.toRoute<BlogNavRoute.PostDetail>().postID
+            val route = backStack.toRoute<BlogNavRoute.PostDetail>()
+            val postType = route.postType
+            val postID = route.postID
 
             DetailScreen(
                 modifier = Modifier
