@@ -61,10 +61,10 @@ fun BlogNavHost(
                 postID = postID,
                 navigateToList = { navController.popBackStack() },
                 navigateToMain = {
-                    navController.popBackStack(
-                        route = BlogNavRoute.Main,
-                        inclusive = false
-                    )
+                    navController.navigate(BlogNavRoute.Main) {
+                        popUpTo(BlogNavRoute.Main)
+                        launchSingleTop = true
+                    }
                 }
             )
         }
