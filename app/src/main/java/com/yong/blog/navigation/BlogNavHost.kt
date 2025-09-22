@@ -22,9 +22,7 @@ fun BlogNavHost(
         startDestination = BlogNavRoute.Main
     ) {
         composable<BlogNavRoute.Main> {
-            MainScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
+            MainScreenNav(
                 navigateToList = { type ->
                     navController.navigate(
                         route = BlogNavRoute.PostList(type)
@@ -42,18 +40,14 @@ fun BlogNavHost(
             val route = backStack.toRoute<BlogNavRoute.PostList>()
             val postType = route.postType
 
-            ListScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
+            ListScreenNav(
                 postType = postType,
                 navigateToDetail = { type, id ->
                     navController.navigate(
                         route = BlogNavRoute.PostDetail(type, id)
                     )
                 },
-                navigateToMain = {
-                    navController.popBackStack()
-                }
+                navigateToMain = { navController.popBackStack() }
             )
         }
 
@@ -62,14 +56,10 @@ fun BlogNavHost(
             val postType = route.postType
             val postID = route.postID
 
-            DetailScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
+            DetailScreenNav(
                 postType = postType,
                 postID = postID,
-                navigateToList = {
-                    navController.popBackStack()
-                },
+                navigateToList = { navController.popBackStack() },
                 navigateToMain = {
                     navController.popBackStack(
                         route = BlogNavRoute.Main,
@@ -79,4 +69,49 @@ fun BlogNavHost(
             )
         }
     }
+}
+
+@Composable
+private fun MainScreenNav(
+    navigateToList: (String) -> Unit,
+    navigateToDetail: (String, String) -> Unit
+) {
+    MainScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        navigateToList = navigateToList,
+        navigateToDetail = navigateToDetail
+    )
+}
+
+@Composable
+private fun ListScreenNav(
+    postType: String,
+    navigateToDetail: (String, String) -> Unit,
+    navigateToMain: () -> Unit
+) {
+    ListScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        postType = postType,
+        navigateToDetail = navigateToDetail,
+        navigateToMain = navigateToMain
+    )
+}
+
+@Composable
+private fun DetailScreenNav(
+    postType: String,
+    postID: String,
+    navigateToList: () -> Unit,
+    navigateToMain: () -> Unit
+) {
+    DetailScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        postType = postType,
+        postID = postID,
+        navigateToList = navigateToList,
+        navigateToMain = navigateToMain
+    )
 }
