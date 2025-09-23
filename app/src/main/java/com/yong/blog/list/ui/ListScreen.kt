@@ -121,7 +121,9 @@ private fun ListScreenBody(
             }
 
             BlogUiStatus.UI_STATUS_LOADING -> {
-                BlogLoadingIndicator(modifier = Modifier)
+                BlogLoadingIndicator(
+                    modifier = Modifier
+                )
             }
 
             BlogUiStatus.UI_STATUS_NORMAL -> {
@@ -228,7 +230,8 @@ private fun PostListItemImage(
     ) {
         if(postThumbnail != null) {
             Image(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 bitmap = postThumbnail.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
