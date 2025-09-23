@@ -92,7 +92,8 @@ private fun MarkdownContentImage(
     ) {
         if(imageBitmap != null) {
             Image(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 bitmap = imageBitmap.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.Fit
