@@ -1,7 +1,6 @@
 package com.yong.blog.detail.ui.markdown
 
 import android.graphics.Bitmap
-import android.text.util.Linkify
 import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -21,17 +20,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import ca.blarg.prism4j.languages.Prism4jGrammarLocator
+import com.yong.blog.common.util.MarkwonUtil
 import com.yong.blog.detail.viewmodel.MarkdownElement
 import io.noties.markwon.Markwon
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.ext.tables.TableTheme
-import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.linkify.LinkifyPlugin
-import io.noties.markwon.syntax.Prism4jThemeDarkula
-import io.noties.markwon.syntax.SyntaxHighlightPlugin
-import io.noties.prism4j.Prism4j
 
 @Composable
 fun MarkdownContent(
@@ -41,34 +32,7 @@ fun MarkdownContent(
     requestPostImage: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val markwon = remember {
-        val htmlPlugin = HtmlPlugin.create()
-
-        val linkifyPlugin = LinkifyPlugin.create(
-            Linkify.EMAIL_ADDRESSES
-            or Linkify.PHONE_NUMBERS
-            or Linkify.WEB_URLS
-        )
-
-        val strikeThroughPlugin = StrikethroughPlugin.create()
-
-        val tableTheme = TableTheme.Builder()
-            .tableBorderWidth(1)
-            .tableCellPadding(-10)
-            .build()
-        val tablePlugin = TablePlugin.create(tableTheme)
-
-        val prism4j = Prism4j(Prism4jGrammarLocator())
-        val syntaxHighlightPlugin = SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create())
-
-        Markwon.builder(context)
-            .usePlugin(htmlPlugin)
-            .usePlugin(linkifyPlugin)
-            .usePlugin(strikeThroughPlugin)
-            .usePlugin(syntaxHighlightPlugin)
-            .usePlugin(tablePlugin)
-            .build()
-    }
+    val markwon = remember { MarkwonUtil.createMarkwon(context) }
 
     Box(
         modifier = modifier
