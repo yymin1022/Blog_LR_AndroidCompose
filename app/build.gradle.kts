@@ -65,6 +65,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.markwon.core)
+    implementation(libs.markwon.ext.strikethrough)
     implementation(libs.markwon.html)
     implementation(libs.markwon.image)
     implementation(libs.markwon.linkify)
