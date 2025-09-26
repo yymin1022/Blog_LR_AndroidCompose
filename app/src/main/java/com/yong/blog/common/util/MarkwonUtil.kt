@@ -13,7 +13,7 @@ import io.noties.markwon.syntax.Prism4jThemeDarkula
 import io.noties.markwon.syntax.SyntaxHighlightPlugin
 import io.noties.prism4j.Prism4j
 
-class MarkwonUtil {
+object MarkwonUtil {
     fun createMarkwon(context: Context): Markwon {
         val markwonBuilder = Markwon.builder(context)
             .usePlugin(createHtmlPlugin())
