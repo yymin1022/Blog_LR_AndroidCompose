@@ -39,6 +39,8 @@ fun MarkdownContent(
 ) {
     val context = LocalContext.current
     val markwon = remember {
+        val htmlPlugin = HtmlPlugin.create()
+
         val linkifyPlugin = LinkifyPlugin.create(
             Linkify.EMAIL_ADDRESSES
             or Linkify.PHONE_NUMBERS
@@ -49,9 +51,9 @@ fun MarkdownContent(
         val syntaxHighlightPlugin = SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create())
 
         Markwon.builder(context)
+            .usePlugin(htmlPlugin)
             .usePlugin(linkifyPlugin)
             .usePlugin(syntaxHighlightPlugin)
-            .usePlugin(HtmlPlugin.create())
             .build()
     }
 
