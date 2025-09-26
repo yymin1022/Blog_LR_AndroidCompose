@@ -38,7 +38,7 @@ import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.BlogUiStatus
 import com.yong.blog.common.ui.theme.BlogBlue
-import com.yong.blog.common.ui.theme.BlogErrorIndicator
+import com.yong.blog.common.ui.BlogErrorIndicator
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 import com.yong.blog.list.viewmodel.ListViewModel

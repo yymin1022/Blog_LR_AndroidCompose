@@ -32,7 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.BlogUiStatus
-import com.yong.blog.common.ui.theme.BlogErrorIndicator
+import com.yong.blog.common.ui.BlogErrorIndicator
 import com.yong.blog.detail.ui.markdown.MarkdownContent
 import com.yong.blog.detail.viewmodel.DetailViewModel
 import com.yong.blog.detail.viewmodel.MarkdownElement
