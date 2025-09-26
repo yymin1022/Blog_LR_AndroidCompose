@@ -24,6 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import ca.blarg.prism4j.languages.Prism4jGrammarLocator
 import com.yong.blog.detail.viewmodel.MarkdownElement
 import io.noties.markwon.Markwon
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.syntax.Prism4jThemeDarkula
@@ -47,12 +48,15 @@ fun MarkdownContent(
             or Linkify.WEB_URLS
         )
 
+        val strikeThroughPlugin = StrikethroughPlugin.create()
+
         val prism4j = Prism4j(Prism4jGrammarLocator())
         val syntaxHighlightPlugin = SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create())
 
         Markwon.builder(context)
             .usePlugin(htmlPlugin)
             .usePlugin(linkifyPlugin)
+            .usePlugin(strikeThroughPlugin)
             .usePlugin(syntaxHighlightPlugin)
             .build()
     }
