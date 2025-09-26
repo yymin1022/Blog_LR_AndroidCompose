@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,8 @@ import ca.blarg.prism4j.languages.Prism4jGrammarLocator
 import com.yong.blog.detail.viewmodel.MarkdownElement
 import io.noties.markwon.Markwon
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tables.TableTheme
 import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.linkify.LinkifyPlugin
 import io.noties.markwon.syntax.Prism4jThemeDarkula
@@ -50,6 +53,12 @@ fun MarkdownContent(
 
         val strikeThroughPlugin = StrikethroughPlugin.create()
 
+        val tableTheme = TableTheme.Builder()
+            .tableBorderWidth(1)
+            .tableCellPadding(-10)
+            .build()
+        val tablePlugin = TablePlugin.create(tableTheme)
+
         val prism4j = Prism4j(Prism4jGrammarLocator())
         val syntaxHighlightPlugin = SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create())
 
@@ -58,6 +67,7 @@ fun MarkdownContent(
             .usePlugin(linkifyPlugin)
             .usePlugin(strikeThroughPlugin)
             .usePlugin(syntaxHighlightPlugin)
+            .usePlugin(tablePlugin)
             .build()
     }
 
