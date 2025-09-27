@@ -43,17 +43,17 @@ class ListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ListUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun getAppBarTitle(type: String) {
-        _uiState.update { it.copy(appBarTitle = POST_TYPE_RESOURCE_MAP[type]) }
+    fun getAppBarTitle(postType: String) {
+        _uiState.update { it.copy(appBarTitle = POST_TYPE_RESOURCE_MAP[postType]) }
     }
 
-    fun getPostList(type: String) {
+    fun getPostList(postType: String) {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_LOADING) }
 
             try {
-                val postList = repository.getPostList(type)
-                if(postList == null) throw PostException("PostList [$type] got error")
+                val postList = repository.getPostList(postType)
+                if(postList == null) throw PostException("PostList [$postType] got error")
 
                 _uiState.update { it.copy(
                     uiStatus = BlogUiStatus.UI_STATUS_NORMAL,
@@ -61,8 +61,8 @@ class ListViewModel @Inject constructor(
                 ) }
 
                 postList.postList.forEach { post ->
-                    val id = post.postURL
-                    requestPostThumbnail(type, id)
+                    val postURL = post.postURL
+                    requestPostThumbnail(postType, postURL)
                 }
             } catch(e: Exception) {
                 e.printStackTrace()
@@ -71,11 +71,11 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    private fun requestPostThumbnail(type: String, id: String) {
+    private fun requestPostThumbnail(postType: String, postID: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val thumbnailImage = repository.getPostThumbnail(type, id)
+            val thumbnailImage = repository.getPostThumbnail(postType, postID)
             if(thumbnailImage == null) {
-                Log.e(LOG_TAG, "Thumbnail [$id] got error")
+                Log.e(LOG_TAG, "Thumbnail [$postID] got error")
                 return@launch
             }
 
@@ -90,7 +90,7 @@ class ListViewModel @Inject constructor(
                 }
             }
 
-            _uiState.update { it.copy(postThumbnailMap = it.postThumbnailMap + (id to thumbnailBitmap)) }
+            _uiState.update { it.copy(postThumbnailMap = it.postThumbnailMap + (postID to thumbnailBitmap)) }
         }
     }
 }
