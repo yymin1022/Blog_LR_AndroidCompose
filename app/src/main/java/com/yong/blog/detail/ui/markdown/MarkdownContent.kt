@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +29,6 @@ fun MarkdownContent(
     modifier: Modifier = Modifier,
     markdownContent: List<MarkdownElement>,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String) -> Unit
 ) {
     val context = LocalContext.current
     val markwon = remember { MarkwonUtil.createMarkwon(context) }
@@ -52,7 +50,6 @@ fun MarkdownContent(
                         MarkdownContentImage(
                             modifier = Modifier,
                             imageBitmap = postImageMap[element.srcID],
-                            onRequestImage = { requestPostImage(element.srcID) }
                         )
                     }
                 }
@@ -65,12 +62,7 @@ fun MarkdownContent(
 private fun MarkdownContentImage(
     modifier: Modifier = Modifier,
     imageBitmap: Bitmap?,
-    onRequestImage: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        onRequestImage()
-    }
-
     Box(
         modifier = modifier
             .padding(horizontal = 20.dp)

@@ -51,7 +51,8 @@ class DetailViewModel @Inject constructor(
                 val postData = repository.getPostData(type, id)
                 if(postData == null) throw PostException("PostData [$type] got error")
 
-                val postMarkdownContent = parseMarkdown(postData.postContent)
+                val postUrl = postData.postUrl
+                val postMarkdownContent = parseMarkdown(type, postUrl, postData.postContent)
                 _uiState.update {
                     it.copy(
                         postData = postData,
@@ -66,7 +67,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private fun parseMarkdown(markdownContent: String): List<MarkdownElement> {
+    private fun parseMarkdown(postType: String, postUrl: String, markdownContent: String): List<MarkdownElement> {
         val imageRegex = Regex("""!\[(.*?)]\((.*?)\)|<img.*?src="(.*?)".*?>""")
 
         var prevIdx = 0
@@ -79,6 +80,7 @@ class DetailViewModel @Inject constructor(
 
             val srcID = matchRes.groupValues[2].ifEmpty { matchRes.groupValues[3] }
             parseRes.add(MarkdownElement.Image(srcID))
+            getPostImage(postType, postUrl, srcID)
 
             prevIdx = matchRes.range.last + 1
         }
@@ -91,7 +93,7 @@ class DetailViewModel @Inject constructor(
         return parseRes
     }
 
-    fun getPostImage(type: String, id: String, srcID: String) {
+    private fun getPostImage(type: String, id: String, srcID: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to null)) }
 
