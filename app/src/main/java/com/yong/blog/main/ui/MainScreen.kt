@@ -3,6 +3,7 @@ package com.yong.blog.main.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -10,10 +11,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yong.blog.R
-import com.yong.blog.common.ui.theme.BlogBlue
 
 @Composable
 fun MainScreen(
@@ -78,7 +79,7 @@ private fun MainTitle(
         )
         MainTitleText(
             title = stringResource(R.string.main_title_2),
-            titleColor = BlogBlue
+            titleColor = MaterialTheme.colorScheme.primary,
         )
         MainTitleText(
             title = stringResource(R.string.main_title_3),
@@ -89,11 +90,13 @@ private fun MainTitle(
 @Composable
 private fun MainTitleText(
     title: String,
-    titleColor: Color = Color.Unspecified,
+    titleColor: Color? = null,
 ) {
+    val textColor = titleColor ?: MaterialTheme.colorScheme.onBackground
+
     Text(
         text = title,
-        color = titleColor,
+        color = textColor,
         fontSize = 35.sp,
     )
 }
@@ -110,7 +113,9 @@ private fun PostListButton(
     ) {
         Text(
             text = title,
+            color = MaterialTheme.colorScheme.onBackground,
             fontSize = 20.sp,
+            fontWeight = FontWeight.Normal,
         )
     }
 }
