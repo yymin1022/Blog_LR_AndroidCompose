@@ -59,6 +59,11 @@ class ListViewModel @Inject constructor(
                     uiStatus = BlogUiStatus.UI_STATUS_NORMAL,
                     postList = postList
                 ) }
+
+                postList.postList.forEach { post ->
+                    val id = post.postURL
+                    requestPostThumbnail(type, id)
+                }
             } catch(e: Exception) {
                 e.printStackTrace()
                 _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_ERROR) }
@@ -66,7 +71,7 @@ class ListViewModel @Inject constructor(
         }
     }
 
-    fun requestPostThumbnail(type: String, id: String) {
+    private fun requestPostThumbnail(type: String, id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             val thumbnailImage = repository.getPostThumbnail(type, id)
             if(thumbnailImage == null) {

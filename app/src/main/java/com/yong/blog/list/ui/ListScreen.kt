@@ -87,7 +87,6 @@ fun ListScreen(
             thumbnailMap = thumbnailMap,
             uiStatus = uiStatus,
             requestPostList = { viewModel.getPostList(postType) },
-            requestPostThumbnail = viewModel::requestPostThumbnail,
             navigateToDetail = navigateToDetail
         )
     }
@@ -101,7 +100,6 @@ private fun ListScreenBody(
     thumbnailMap: Map<String, Bitmap?>,
     uiStatus: BlogUiStatus,
     requestPostList: () -> Unit,
-    requestPostThumbnail: (String, String) -> Unit,
     navigateToDetail: (String, String) -> Unit
 ) {
     Box(
@@ -129,7 +127,6 @@ private fun ListScreenBody(
                     postType = postType,
                     postList = postList,
                     thumbnailMap = thumbnailMap,
-                    requestPostThumbnail = requestPostThumbnail,
                     navigateToDetail = navigateToDetail
                 )
             }
@@ -143,7 +140,6 @@ private fun PostList(
     postType: String,
     postList: PostList?,
     thumbnailMap: Map<String, Bitmap?>,
-    requestPostThumbnail: (String, String) -> Unit,
     navigateToDetail: (String, String) -> Unit
 ) {
     if(postList != null) {
@@ -164,7 +160,6 @@ private fun PostList(
                     postData = post,
                     postThumbnail = postThumbnail,
                     onClick = navigateToDetail,
-                    requestThumbnail = requestPostThumbnail
                 )
             }
         }
@@ -185,17 +180,11 @@ private fun PostListItem(
     postData: PostListItem,
     postThumbnail: Bitmap?,
     onClick: (String, String) -> Unit,
-    requestThumbnail: (String, String) -> Unit
 ) {
     val postDate = postData.postDate
     val postID = postData.postID
     val postTag = postData.postTag
     val postTitle = postData.postTitle
-    val postURL = postData.postURL
-
-    LaunchedEffect(postURL) {
-        requestThumbnail(postType, postURL)
-    }
 
     Row(
         modifier = modifier
