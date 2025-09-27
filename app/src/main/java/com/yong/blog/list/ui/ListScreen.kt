@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,11 +25,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,7 +35,6 @@ import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.BlogUiStatus
-import com.yong.blog.common.ui.theme.BlogBlue
 import com.yong.blog.common.ui.BlogErrorIndicator
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
@@ -199,9 +196,8 @@ private fun PostListItem(
 
     Row(
         modifier = modifier
-            .height(96.dp)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .clickable(onClick = { onClick(postType, postID) })
     ) {
         PostListItemImage(
@@ -224,7 +220,7 @@ private fun PostListItemImage(
 ) {
     Box(
         modifier = modifier
-            .fillMaxHeight()
+            .height(96.dp)
             .aspectRatio(1f),
         contentAlignment = Alignment.Center
     ) {
@@ -277,10 +273,8 @@ private fun PostListItemTextDate(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postDate,
+        color = MaterialTheme.colorScheme.onSurface,
         fontSize = 12.sp,
-        style = TextStyle(
-            color = Color.DarkGray
-        )
     )
 }
 
@@ -293,10 +287,8 @@ private fun PostListItemTextTag(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postTag.joinToString(separator = " ") { "#$it" },
+        color = MaterialTheme.colorScheme.onSurface,
         fontSize = 10.sp,
-        style = TextStyle(
-            color = Color.Gray
-        )
     )
 }
 
@@ -309,9 +301,7 @@ private fun PostListItemTextTitle(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 4.dp),
         text = postTitle,
+        color = MaterialTheme.colorScheme.primary,
         fontSize = 16.sp,
-        style = TextStyle(
-            color = BlogBlue
-        )
     )
 }
