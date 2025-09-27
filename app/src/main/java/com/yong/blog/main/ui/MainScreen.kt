@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.yong.blog.R
@@ -20,7 +19,7 @@ import com.yong.blog.common.ui.theme.BlogBlue
 fun MainScreen(
     modifier: Modifier = Modifier,
     navigateToList: (String) -> Unit,
-    navigateToDetail: (String, String) -> Unit
+    navigateToDetail: (String, String) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -30,7 +29,7 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             navigateToList = navigateToList,
-            navigateToDetail = navigateToDetail
+            navigateToDetail = navigateToDetail,
         )
     }
 }
@@ -39,50 +38,50 @@ fun MainScreen(
 private fun MainScreenBody(
     modifier: Modifier = Modifier,
     navigateToList: (String) -> Unit,
-    navigateToDetail: (String, String) -> Unit
+    navigateToDetail: (String, String) -> Unit,
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 20.dp, vertical = 40.dp)
+            .padding(horizontal = 20.dp, vertical = 40.dp),
     ) {
         MainTitle(
-            modifier = Modifier
+            modifier = Modifier,
         )
         PostListButton(
             modifier = Modifier,
             title = "Blog",
-            onClick = { navigateToList("blog") }
+            onClick = { navigateToList("blog") },
         )
         PostListButton(
             modifier = Modifier,
             title = "Project",
-            onClick = { navigateToList("project") }
+            onClick = { navigateToList("project") },
         )
         PostListButton(
             modifier = Modifier,
             title = "About",
-            onClick = { navigateToDetail("about", "LR") }
+            onClick = { navigateToDetail("about", "LR") },
         )
     }
 }
 
 @Composable
 private fun MainTitle(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
-            .padding(bottom = 20.dp)
+            .padding(bottom = 20.dp),
     ) {
         MainTitleText(
-            title = stringResource(R.string.main_title_1)
+            title = stringResource(R.string.main_title_1),
         )
         MainTitleText(
             title = stringResource(R.string.main_title_2),
             titleColor = BlogBlue
         )
         MainTitleText(
-            title = stringResource(R.string.main_title_3)
+            title = stringResource(R.string.main_title_3),
         )
     }
 }
@@ -90,12 +89,12 @@ private fun MainTitle(
 @Composable
 private fun MainTitleText(
     title: String,
-    titleColor: Color = Color.Black
+    titleColor: Color = Color.Unspecified,
 ) {
     Text(
         text = title,
         color = titleColor,
-        fontSize = 35.sp
+        fontSize = 35.sp,
     )
 }
 
@@ -103,18 +102,15 @@ private fun MainTitleText(
 private fun PostListButton(
     modifier: Modifier = Modifier,
     title: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     OutlinedButton(
         modifier = modifier,
-        onClick = onClick
+        onClick = onClick,
     ) {
         Text(
             text = title,
-            style = TextStyle(
-                color = Color.Black,
-                fontSize = 20.sp
-            )
+            fontSize = 20.sp,
         )
     }
 }
