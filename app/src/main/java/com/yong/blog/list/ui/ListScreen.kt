@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -23,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -55,6 +57,12 @@ fun ListScreen(
     val postList = uiState.postList
     val thumbnailMap = uiState.postThumbnailMap
 
+    val listScrollState = rememberSaveable(
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
+
     LaunchedEffect(postType) {
         viewModel.getAppBarTitle(postType)
         viewModel.getPostList(postType)
@@ -84,6 +92,7 @@ fun ListScreen(
                 .padding(innerPadding),
             postType = postType,
             postList = postList,
+            listScrollState = listScrollState,
             thumbnailMap = thumbnailMap,
             uiStatus = uiStatus,
             requestPostList = { viewModel.getPostList(postType) },
@@ -97,6 +106,7 @@ private fun ListScreenBody(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
+    listScrollState: LazyListState,
     thumbnailMap: Map<String, Bitmap?>,
     uiStatus: BlogUiStatus,
     requestPostList: () -> Unit,
@@ -126,6 +136,7 @@ private fun ListScreenBody(
                     modifier = Modifier,
                     postType = postType,
                     postList = postList,
+                    listScrollState = listScrollState,
                     thumbnailMap = thumbnailMap,
                     navigateToDetail = navigateToDetail
                 )
@@ -139,12 +150,14 @@ private fun PostList(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
+    listScrollState: LazyListState,
     thumbnailMap: Map<String, Bitmap?>,
     navigateToDetail: (String, String) -> Unit
 ) {
     if(postList != null) {
         LazyColumn(
-            modifier = modifier
+            modifier = modifier,
+            state = listScrollState,
         ) {
             items(
                 count = postList.postCount,
