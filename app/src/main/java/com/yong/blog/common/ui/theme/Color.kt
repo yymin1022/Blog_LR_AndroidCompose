@@ -6,6 +6,7 @@ val BlogBlue = Color(0xFF164EAB)
 
 val Black = Color(0xFF000000)
 val Gray10 = Color(0xFF1C1B1F)
+val Gray30 = Color(0xFF149454F)
 val Gray90 = Color(0xFFE6E1E5)
 
 val White = Color(0xFFFFFFFF)
