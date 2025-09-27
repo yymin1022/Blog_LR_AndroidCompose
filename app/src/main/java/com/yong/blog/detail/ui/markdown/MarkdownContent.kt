@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -99,15 +100,15 @@ private fun MarkdownContentText(
     markdownContent: String
 ) {
     val textColor = MaterialTheme.colorScheme.onBackground
+
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
-            TextView(ctx).apply {
-                setTextColor(textColor.hashCode())
-            }
+            TextView(ctx)
         },
-        update = {
-            it.text = markwon.toMarkdown(markdownContent)
+        update = { textView ->
+            textView.text = markwon.toMarkdown(markdownContent)
+            textView.setTextColor(textColor.toArgb())
         }
     )
 }
