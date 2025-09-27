@@ -7,9 +7,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Blue80,
-    secondary = BlueGrey80,
-    tertiary = Sky80
+    primary = Blue60,
+    onPrimary = White,
+    background = Black,
+    onBackground = White,
+    surface = Black,
+    onSurface = Gray80,
 )
 
 private val LightColorScheme = lightColorScheme(
