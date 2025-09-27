@@ -72,7 +72,7 @@ fun ListScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.desc_back)
                         )
                     }
                 }

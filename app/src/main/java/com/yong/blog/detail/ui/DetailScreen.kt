@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.BlogUiStatus
@@ -71,7 +72,7 @@ fun DetailScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.desc_back)
                         )
                     }
                 },
@@ -81,7 +82,7 @@ fun DetailScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Home,
-                            contentDescription = "Home"
+                            contentDescription = stringResource(R.string.desc_home)
                         )
                     }
                 },
