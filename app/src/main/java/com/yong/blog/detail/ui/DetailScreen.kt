@@ -219,7 +219,7 @@ private fun PostDate(
     ) {
         Text(
             text = date,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSecondary,
             fontSize = 14.sp
         )
     }
@@ -240,7 +240,7 @@ private fun PostTag(
             Text(
                 modifier = Modifier.padding(horizontal = 2.dp),
                 text = "#$tag",
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp
             )
         }

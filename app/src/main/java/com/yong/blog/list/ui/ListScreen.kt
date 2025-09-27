@@ -273,7 +273,7 @@ private fun PostListItemTextDate(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postDate,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onSecondary,
         fontSize = 12.sp,
     )
 }
@@ -287,7 +287,7 @@ private fun PostListItemTextTag(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postTag.joinToString(separator = " ") { "#$it" },
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onSecondary,
         fontSize = 10.sp,
     )
 }
