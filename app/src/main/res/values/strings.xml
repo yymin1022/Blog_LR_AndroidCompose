@@ -9,7 +9,7 @@
 
     <string name="main_title_1">Hi, there!</string>
     <string name="main_title_2">LR, the Developer</string>
-    <string name="main_title_3"></string>
+    <string name="main_title_3"/>
 
     <string name="post_type_blog" translatable="false">Blog</string>
     <string name="post_type_project" translatable="false">Project</string>
