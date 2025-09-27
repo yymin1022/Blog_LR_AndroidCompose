@@ -150,7 +150,10 @@ private fun PostList(
         LazyColumn(
             modifier = modifier
         ) {
-            items(postList.postCount) { idx ->
+            items(
+                count = postList.postCount,
+                key = { idx -> postList.postList[idx].postID }
+            ) { idx ->
                 val post = postList.postList[idx]
                 val postURL = post.postURL
                 val postThumbnail = thumbnailMap[postURL]
