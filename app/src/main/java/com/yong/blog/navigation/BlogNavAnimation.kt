@@ -25,4 +25,18 @@ object BlogNavAnimation {
             animationSpec = tween(durationMillis = ANIMATION_DURATION_MS)
         )
     }
+
+    fun popEnterTransition(): NavEnterTransition = {
+        slideIntoContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+            animationSpec = tween(durationMillis = ANIMATION_DURATION_MS)
+        )
+    }
+
+    fun popExitTransition(): NavExitTransition = {
+        slideOutOfContainer(
+            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+            animationSpec = tween(durationMillis = ANIMATION_DURATION_MS)
+        )
+    }
 }
