@@ -19,6 +19,10 @@ fun BlogNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
+        enterTransition = BlogNavAnimation.enterTransition(),
+        exitTransition = BlogNavAnimation.exitTransition(),
+        popEnterTransition = BlogNavAnimation.popEnterTransition(),
+        popExitTransition = BlogNavAnimation.popExitTransition(),
         startDestination = BlogNavRoute.Main
     ) {
         composable<BlogNavRoute.Main> {
