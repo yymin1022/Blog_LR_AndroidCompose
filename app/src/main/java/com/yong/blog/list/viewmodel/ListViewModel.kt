@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.yong.blog.R
 import com.yong.blog.common.exception.PostException
 import com.yong.blog.common.ui.BlogUiStatus
+import com.yong.blog.common.util.FirebaseUtil
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.repository.PostListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,6 +43,10 @@ class ListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ListUiState())
     val uiState = _uiState.asStateFlow()
+
+    fun logListEvent(postType: String) {
+        FirebaseUtil.logEvent(postType)
+    }
 
     fun getAppBarTitle(postType: String) {
         _uiState.update { it.copy(appBarTitle = POST_TYPE_RESOURCE_MAP[postType]) }
