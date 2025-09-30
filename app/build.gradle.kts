@@ -8,6 +8,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 
+    id("com.google.gms.google-services")
+
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
@@ -57,6 +59,8 @@ kotlin {
 dependencies {
     implementation(project(":data"))
     implementation(project(":domain"))
+
+    implementation(platform(libs.firebase.bom))
 
     implementation(libs.coil.compose)
 
