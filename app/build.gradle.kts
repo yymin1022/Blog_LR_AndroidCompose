@@ -9,6 +9,7 @@ plugins {
     id("com.google.devtools.ksp")
 
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 
     id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
@@ -61,6 +62,8 @@ dependencies {
     implementation(project(":domain"))
 
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics.ndk)
 
     implementation(libs.coil.compose)
 
