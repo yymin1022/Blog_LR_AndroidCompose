@@ -4,10 +4,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.yong.blog.detail.ui.DetailScreen
 import com.yong.blog.list.ui.ListScreen
 import com.yong.blog.main.ui.MainScreen
@@ -20,66 +19,103 @@ fun BlogNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = RouteDefinition.Main.route
+        enterTransition = BlogNavAnimation.enterTransition(),
+        exitTransition = BlogNavAnimation.exitTransition(),
+        popEnterTransition = BlogNavAnimation.popEnterTransition(),
+        popExitTransition = BlogNavAnimation.popExitTransition(),
+        startDestination = BlogNavRoute.Main
     ) {
-        composable(
-            route = RouteDefinition.Main.route
-        ) {
-            MainScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
-                onNavigateToList = { postType ->
-                    navController.navigate(RouteDefinition.List.createRoute(postType))
-                }
-            )
-        }
-
-        composable(
-            route = RouteDefinition.List.route,
-            arguments = listOf(
-                navArgument("postType") { type = NavType.StringType }
-            )
-        ) { backStack ->
-            val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
-
-            ListScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
-                postType = postType,
-                onNavigateToDetail = { postType, postID ->
-                    navController.navigate(RouteDefinition.Detail.createRoute(postType, postID))
+        composable<BlogNavRoute.Main> {
+            MainScreenNav(
+                navigateToList = { type ->
+                    navController.navigate(
+                        route = BlogNavRoute.PostList(type)
+                    )
                 },
-                onNavigateToMain = {
-                    navController.popBackStack()
-                }
-            )
-        }
-
-        composable(
-            route = RouteDefinition.Detail.route,
-            arguments = listOf(
-                navArgument("postType") { type = NavType.StringType },
-                navArgument("postID") { type = NavType.StringType }
-            )
-        ) { backStack ->
-            val postID = backStack.arguments?.getString("postID") ?: throw Exception("ID Undefined")
-            val postType = backStack.arguments?.getString("postType") ?: throw Exception("Type Undefined")
-
-            DetailScreen(
-                modifier = Modifier
-                    .fillMaxSize(),
-                postType = postType,
-                postID = postID,
-                onNavigateToList = {
-                    navController.popBackStack()
-                },
-                onNavigateToMain = {
-                    navController.popBackStack(
-                        RouteDefinition.Main.route,
-                        inclusive = false
+                navigateToDetail = { type, id ->
+                    navController.navigate(
+                        route = BlogNavRoute.PostDetail(type, id)
                     )
                 }
             )
         }
+
+        composable<BlogNavRoute.PostList> { backStack ->
+            val route = backStack.toRoute<BlogNavRoute.PostList>()
+            val postType = route.postType
+
+            ListScreenNav(
+                postType = postType,
+                navigateToDetail = { type, id ->
+                    navController.navigate(
+                        route = BlogNavRoute.PostDetail(type, id)
+                    )
+                },
+                navigateToMain = { navController.popBackStack() }
+            )
+        }
+
+        composable<BlogNavRoute.PostDetail> { backStack ->
+            val route = backStack.toRoute<BlogNavRoute.PostDetail>()
+            val postType = route.postType
+            val postID = route.postID
+
+            DetailScreenNav(
+                postType = postType,
+                postID = postID,
+                navigateToList = { navController.popBackStack() },
+                navigateToMain = {
+                    navController.navigate(BlogNavRoute.Main) {
+                        popUpTo(BlogNavRoute.Main)
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
     }
+}
+
+@Composable
+private fun MainScreenNav(
+    navigateToList: (String) -> Unit,
+    navigateToDetail: (String, String) -> Unit
+) {
+    MainScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        navigateToList = navigateToList,
+        navigateToDetail = navigateToDetail
+    )
+}
+
+@Composable
+private fun ListScreenNav(
+    postType: String,
+    navigateToDetail: (String, String) -> Unit,
+    navigateToMain: () -> Unit
+) {
+    ListScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        postType = postType,
+        navigateToDetail = navigateToDetail,
+        navigateToMain = navigateToMain
+    )
+}
+
+@Composable
+private fun DetailScreenNav(
+    postType: String,
+    postID: String,
+    navigateToList: () -> Unit,
+    navigateToMain: () -> Unit
+) {
+    DetailScreen(
+        modifier = Modifier
+            .fillMaxSize(),
+        postType = postType,
+        postID = postID,
+        navigateToList = navigateToList,
+        navigateToMain = navigateToMain
+    )
 }

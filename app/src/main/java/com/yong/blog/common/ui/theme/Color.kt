@@ -2,15 +2,26 @@ package com.yong.blog.common.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// Blog Theme Color
-val BlogBlue = Color(0xFF164EAB)
+val Black = Color(0xFF000000)
 
-// Light Theme Colors
-val Blue80 = Color(0xFF164EAB)        // 라이트모드에서도 기본 색상으로
-val BlueGrey80 = Color(0xFF3B5A91)     // 살짝 연한 느낌의 블루그레이
-val Sky80 = Color(0xFF4F76C2)         // 비교적 밝은 하늘색 느낌
+val White = Color(0xFFFFFFFF)
 
-// Dark Theme Colors
-val Blue40 = Color(0xFF0F397F)        // 더 어두운 블루
-val BlueGrey40 = Color(0xFF1F2F4D)     // 어두운 블루그레이
-val Sky40 = Color(0xFF2C4D99)         // 어두운 스카이블루
+val Gray10 = Color(0xFF1C1B1F)
+val Gray20 = Color(0xFF313033)
+val Gray30 = Color(0xFF49454F)
+val Gray40 = Color(0xFF605D66)
+val Gray50 = Color(0xFF79747E)
+val Gray60 = Color(0xFF938F99)
+val Gray70 = Color(0xFFAEA9B4)
+val Gray80 = Color(0xFFCAC4D0)
+val Gray90 = Color(0xFFE6E1E5)
+
+val Blue10 = Color(0xFF001B3F)
+val Blue20 = Color(0xFF00325B)
+val Blue30 = Color(0xFF004881)
+val Blue40 = Color(0xFF3A62E1)
+val Blue50 = Color(0xFF5B72F4)
+val Blue60 = Color(0xFF7C8CFF)
+val Blue70 = Color(0xFF9FACFF)
+val Blue80 = Color(0xFFADC6FF)
+val Blue90 = Color(0xFFD8E2FF)

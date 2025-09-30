@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,15 +25,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.BlogUiStatus
-import com.yong.blog.common.ui.theme.BlogErrorIndicator
+import com.yong.blog.common.ui.BlogErrorIndicator
 import com.yong.blog.detail.ui.markdown.MarkdownContent
 import com.yong.blog.detail.viewmodel.DetailViewModel
 import com.yong.blog.detail.viewmodel.MarkdownElement
@@ -43,9 +44,9 @@ fun DetailScreen(
     modifier: Modifier = Modifier,
     postType: String,
     postID: String,
-    onNavigateToList: () -> Unit,
-    onNavigateToMain: () -> Unit,
-    viewModel: DetailViewModel = hiltViewModel()
+    navigateToList: () -> Unit,
+    navigateToMain: () -> Unit,
+    viewModel: DetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val uiStatus = uiState.uiStatus
@@ -67,24 +68,24 @@ fun DetailScreen(
                 titleText = stringResource(appBarTitle),
                 navigationIcon = {
                     IconButton(
-                        onClick = onNavigateToList
+                        onClick = navigateToList
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.desc_back)
                         )
                     }
                 },
                 actionIcon = {
                     IconButton(
-                        onClick = onNavigateToMain
+                        onClick = navigateToMain
                     ) {
                         Icon(
                             imageVector = Icons.Default.Home,
-                            contentDescription = "Home"
+                            contentDescription = stringResource(R.string.desc_home)
                         )
                     }
-                }
+                },
             )
         }
     ) { innerPadding ->
@@ -96,7 +97,6 @@ fun DetailScreen(
             postMarkdownContent = postMarkdownContent,
             uiStatus = uiStatus,
             requestPostData = { viewModel.getPostData(postType, postID) },
-            requestPostImage = { postUrl, srcID -> viewModel.getPostImage(postType, postUrl, srcID) }
         )
     }
 }
@@ -109,64 +109,61 @@ private fun DetailScreenBody(
     postMarkdownContent: List<MarkdownElement>,
     uiStatus: BlogUiStatus,
     requestPostData: () -> Unit,
-    requestPostImage: (String, String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
     Box(
-        modifier = modifier
+        modifier = modifier,
     ) {
         when(uiStatus) {
             BlogUiStatus.UI_STATUS_ERROR -> {
                 BlogErrorIndicator(
                     modifier = Modifier
                         .fillMaxSize(),
-                    onRetry = requestPostData
+                    onRetry = requestPostData,
                 )
             }
 
             BlogUiStatus.UI_STATUS_LOADING -> {
                 BlogLoadingIndicator(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 )
             }
 
             BlogUiStatus.UI_STATUS_NORMAL -> {
-                if(postData != null) {
-                    val postDate = postData.postDate
-                    val postTag = postData.postTag
-                    val postTitle = postData.postTitle
-                    val postUrl = postData.postUrl
+                postData?.let { data ->
+                    val postDate = data.postDate
+                    val postTag = data.postTag
+                    val postTitle = data.postTitle
 
                     Column(
                         modifier = Modifier
                             .verticalScroll(scrollState)
-                            .padding(horizontal = 16.dp, vertical = 16.dp)
+                            .padding(horizontal = 16.dp, vertical = 16.dp),
                     ) {
                         PostTitle(
                             modifier = Modifier,
-                            title = postTitle
+                            title = postTitle,
                         )
                         PostDate(
                             modifier = Modifier,
-                            date = postDate
+                            date = postDate,
                         )
                         PostContentDivider(
-                            modifier = Modifier
+                            modifier = Modifier,
                         )
                         PostContent(
                             modifier = Modifier,
                             markdownContent = postMarkdownContent,
                             postImageMap = postImageMap,
-                            requestPostImage = { srcID -> requestPostImage(postUrl, srcID) }
                         )
                         PostContentDivider(
-                            modifier = Modifier
+                            modifier = Modifier,
                         )
                         PostTag(
                             modifier = Modifier,
-                            tagList = postTag
+                            tagList = postTag,
                         )
                     }
                 }
@@ -180,47 +177,45 @@ private fun PostContent(
     modifier: Modifier = Modifier,
     markdownContent: List<MarkdownElement>,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String) -> Unit
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 8.dp)
+            .padding(horizontal = 8.dp, vertical = 8.dp),
     ) {
         MarkdownContent(
             modifier = Modifier,
             markdownContent = markdownContent,
             postImageMap = postImageMap,
-            requestPostImage = requestPostImage
         )
     }
 }
 
 @Composable
 private fun PostContentDivider(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     HorizontalDivider(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
+            .padding(vertical = 16.dp),
     )
 }
 
 @Composable
 private fun PostDate(
     modifier: Modifier = Modifier,
-    date: String
+    date: String,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = date,
-            color = Color.DarkGray,
-            fontSize = 14.sp
+            color = MaterialTheme.colorScheme.onSecondary,
+            fontSize = 14.sp,
         )
     }
 }
@@ -228,7 +223,7 @@ private fun PostDate(
 @Composable
 private fun PostTag(
     modifier: Modifier = Modifier,
-    tagList: List<String>
+    tagList: List<String>,
 ) {
     Row(
         modifier = modifier
@@ -240,8 +235,8 @@ private fun PostTag(
             Text(
                 modifier = Modifier.padding(horizontal = 2.dp),
                 text = "#$tag",
-                color = Color.Gray,
-                fontSize = 14.sp
+                color = MaterialTheme.colorScheme.onSecondary,
+                fontSize = 14.sp,
             )
         }
     }
@@ -250,17 +245,17 @@ private fun PostTag(
 @Composable
 private fun PostTitle(
     modifier: Modifier = Modifier,
-    title: String
+    title: String,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = title,
-            fontSize = 20.sp
+            fontSize = 20.sp,
         )
     }
 }

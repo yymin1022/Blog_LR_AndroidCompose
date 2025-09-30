@@ -3,7 +3,7 @@ package com.yong.blog.common.network.interceptor
 import android.content.Context
 import android.util.Log
 import com.yong.blog.common.exception.NetworkException
-import com.yong.blog.common.network.util.NetworkUtil
+import com.yong.blog.common.util.NetworkUtil
 import okhttp3.Interceptor
 import okhttp3.Response
 

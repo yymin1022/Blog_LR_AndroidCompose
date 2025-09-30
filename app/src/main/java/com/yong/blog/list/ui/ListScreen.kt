@@ -8,28 +8,28 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -37,8 +37,7 @@ import com.yong.blog.R
 import com.yong.blog.common.ui.BlogAppBar
 import com.yong.blog.common.ui.BlogLoadingIndicator
 import com.yong.blog.common.ui.BlogUiStatus
-import com.yong.blog.common.ui.theme.BlogBlue
-import com.yong.blog.common.ui.theme.BlogErrorIndicator
+import com.yong.blog.common.ui.BlogErrorIndicator
 import com.yong.blog.domain.model.PostList
 import com.yong.blog.domain.model.PostListItem
 import com.yong.blog.list.viewmodel.ListViewModel
@@ -47,8 +46,8 @@ import com.yong.blog.list.viewmodel.ListViewModel
 fun ListScreen(
     modifier: Modifier = Modifier,
     postType: String,
-    onNavigateToDetail: (String, String) -> Unit,
-    onNavigateToMain: () -> Unit,
+    navigateToDetail: (String, String) -> Unit,
+    navigateToMain: () -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -57,6 +56,12 @@ fun ListScreen(
     val appBarTitle = uiState.appBarTitle
     val postList = uiState.postList
     val thumbnailMap = uiState.postThumbnailMap
+
+    val listScrollState = rememberSaveable(
+        saver = LazyListState.Saver
+    ) {
+        LazyListState()
+    }
 
     LaunchedEffect(postType) {
         viewModel.getAppBarTitle(postType)
@@ -71,11 +76,11 @@ fun ListScreen(
                 titleText = String.format(stringResource(R.string.list_appbar_title), appBarTitle?.let { stringResource(it) } ?: ""),
                 navigationIcon = {
                     IconButton(
-                        onClick = onNavigateToMain
+                        onClick = navigateToMain
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.desc_back)
                         )
                     }
                 }
@@ -87,11 +92,11 @@ fun ListScreen(
                 .padding(innerPadding),
             postType = postType,
             postList = postList,
+            listScrollState = listScrollState,
             thumbnailMap = thumbnailMap,
             uiStatus = uiStatus,
             requestPostList = { viewModel.getPostList(postType) },
-            requestPostThumbnail = viewModel::requestPostThumbnail,
-            onNavigateToDetail = onNavigateToDetail
+            navigateToDetail = navigateToDetail
         )
     }
 }
@@ -101,11 +106,11 @@ private fun ListScreenBody(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
+    listScrollState: LazyListState,
     thumbnailMap: Map<String, Bitmap?>,
     uiStatus: BlogUiStatus,
     requestPostList: () -> Unit,
-    requestPostThumbnail: (String, String) -> Unit,
-    onNavigateToDetail: (String, String) -> Unit
+    navigateToDetail: (String, String) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -121,7 +126,9 @@ private fun ListScreenBody(
             }
 
             BlogUiStatus.UI_STATUS_LOADING -> {
-                BlogLoadingIndicator(modifier = Modifier)
+                BlogLoadingIndicator(
+                    modifier = Modifier
+                )
             }
 
             BlogUiStatus.UI_STATUS_NORMAL -> {
@@ -129,9 +136,9 @@ private fun ListScreenBody(
                     modifier = Modifier,
                     postType = postType,
                     postList = postList,
+                    listScrollState = listScrollState,
                     thumbnailMap = thumbnailMap,
-                    requestPostThumbnail = requestPostThumbnail,
-                    onNavigateToDetail = onNavigateToDetail
+                    navigateToDetail = navigateToDetail
                 )
             }
         }
@@ -143,15 +150,19 @@ private fun PostList(
     modifier: Modifier = Modifier,
     postType: String,
     postList: PostList?,
+    listScrollState: LazyListState,
     thumbnailMap: Map<String, Bitmap?>,
-    requestPostThumbnail: (String, String) -> Unit,
-    onNavigateToDetail: (String, String) -> Unit
+    navigateToDetail: (String, String) -> Unit
 ) {
     if(postList != null) {
         LazyColumn(
-            modifier = modifier
+            modifier = modifier,
+            state = listScrollState,
         ) {
-            items(postList.postCount) { idx ->
+            items(
+                count = postList.postCount,
+                key = { idx -> postList.postList[idx].postID }
+            ) { idx ->
                 val post = postList.postList[idx]
                 val postURL = post.postURL
                 val postThumbnail = thumbnailMap[postURL]
@@ -161,8 +172,7 @@ private fun PostList(
                     postType = postType,
                     postData = post,
                     postThumbnail = postThumbnail,
-                    onClick = onNavigateToDetail,
-                    requestThumbnail = requestPostThumbnail
+                    onClick = navigateToDetail,
                 )
             }
         }
@@ -183,23 +193,16 @@ private fun PostListItem(
     postData: PostListItem,
     postThumbnail: Bitmap?,
     onClick: (String, String) -> Unit,
-    requestThumbnail: (String, String) -> Unit
 ) {
     val postDate = postData.postDate
     val postID = postData.postID
     val postTag = postData.postTag
     val postTitle = postData.postTitle
-    val postURL = postData.postURL
-
-    LaunchedEffect(postURL) {
-        requestThumbnail(postType, postURL)
-    }
 
     Row(
         modifier = modifier
-            .height(96.dp)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .clickable(onClick = { onClick(postType, postID) })
     ) {
         PostListItemImage(
@@ -222,13 +225,14 @@ private fun PostListItemImage(
 ) {
     Box(
         modifier = modifier
-            .fillMaxHeight()
+            .height(96.dp)
             .aspectRatio(1f),
         contentAlignment = Alignment.Center
     ) {
         if(postThumbnail != null) {
             Image(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 bitmap = postThumbnail.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
@@ -274,10 +278,8 @@ private fun PostListItemTextDate(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postDate,
+        color = MaterialTheme.colorScheme.onSecondary,
         fontSize = 12.sp,
-        style = TextStyle(
-            color = Color.DarkGray
-        )
     )
 }
 
@@ -290,10 +292,8 @@ private fun PostListItemTextTag(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 2.dp),
         text = postTag.joinToString(separator = " ") { "#$it" },
+        color = MaterialTheme.colorScheme.onSecondary,
         fontSize = 10.sp,
-        style = TextStyle(
-            color = Color.Gray
-        )
     )
 }
 
@@ -306,9 +306,7 @@ private fun PostListItemTextTitle(
         modifier = modifier
             .padding(horizontal = 4.dp, vertical = 4.dp),
         text = postTitle,
+        color = MaterialTheme.colorScheme.primary,
         fontSize = 16.sp,
-        style = TextStyle(
-            color = BlogBlue
-        )
     )
 }

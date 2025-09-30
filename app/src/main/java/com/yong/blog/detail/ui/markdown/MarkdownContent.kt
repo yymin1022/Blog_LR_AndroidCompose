@@ -9,42 +9,29 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import ca.blarg.prism4j.languages.Prism4jGrammarLocator
+import com.yong.blog.common.util.MarkwonUtil
 import com.yong.blog.detail.viewmodel.MarkdownElement
 import io.noties.markwon.Markwon
-import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.syntax.Prism4jThemeDarkula
-import io.noties.markwon.syntax.SyntaxHighlightPlugin
-import io.noties.prism4j.Prism4j
 
 @Composable
 fun MarkdownContent(
     modifier: Modifier = Modifier,
     markdownContent: List<MarkdownElement>,
     postImageMap: Map<String, Bitmap?>,
-    requestPostImage: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val markwon = remember {
-        val prism4j = Prism4j(Prism4jGrammarLocator())
-        val syntaxHighlightPlugin = SyntaxHighlightPlugin.create(prism4j, Prism4jThemeDarkula.create())
-
-        Markwon.builder(context)
-            .usePlugin(syntaxHighlightPlugin)
-            .usePlugin(HtmlPlugin.create())
-            .build()
-    }
+    val markwon = remember { MarkwonUtil.createMarkwon(context) }
 
     Box(
         modifier = modifier
@@ -63,7 +50,6 @@ fun MarkdownContent(
                         MarkdownContentImage(
                             modifier = Modifier,
                             imageBitmap = postImageMap[element.srcID],
-                            onRequestImage = { requestPostImage(element.srcID) }
                         )
                     }
                 }
@@ -76,12 +62,7 @@ fun MarkdownContent(
 private fun MarkdownContentImage(
     modifier: Modifier = Modifier,
     imageBitmap: Bitmap?,
-    onRequestImage: () -> Unit
 ) {
-    LaunchedEffect(Unit) {
-        onRequestImage()
-    }
-
     Box(
         modifier = modifier
             .padding(horizontal = 20.dp)
@@ -92,7 +73,8 @@ private fun MarkdownContentImage(
     ) {
         if(imageBitmap != null) {
             Image(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 bitmap = imageBitmap.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.Fit
@@ -109,15 +91,16 @@ private fun MarkdownContentText(
     markwon: Markwon,
     markdownContent: String
 ) {
+    val textColor = MaterialTheme.colorScheme.onBackground
+
     AndroidView(
         modifier = modifier,
         factory = { ctx ->
-            TextView(ctx).apply {
-                setTextColor(Color.Black.hashCode())
-            }
+            TextView(ctx)
         },
-        update = {
-            it.text = markwon.toMarkdown(markdownContent)
+        update = { textView ->
+            textView.text = markwon.toMarkdown(markdownContent)
+            textView.setTextColor(textColor.toArgb())
         }
     )
 }

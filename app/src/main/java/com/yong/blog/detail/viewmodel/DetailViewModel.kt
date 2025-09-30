@@ -43,15 +43,16 @@ class DetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun getPostData(type: String, id: String) {
+    fun getPostData(postType: String, postID: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(uiStatus = BlogUiStatus.UI_STATUS_LOADING) }
 
             try {
-                val postData = repository.getPostData(type, id)
-                if(postData == null) throw PostException("PostData [$type] got error")
+                val postData = repository.getPostData(postType, postID)
+                if(postData == null) throw PostException("PostData [$postType] got error")
 
-                val postMarkdownContent = parseMarkdown(postData.postContent)
+                val postUrl = postData.postUrl
+                val postMarkdownContent = parseMarkdown(postType, postUrl, postData.postContent)
                 _uiState.update {
                     it.copy(
                         postData = postData,
@@ -66,7 +67,7 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    private fun parseMarkdown(markdownContent: String): List<MarkdownElement> {
+    private fun parseMarkdown(postType: String, postUrl: String, markdownContent: String): List<MarkdownElement> {
         val imageRegex = Regex("""!\[(.*?)]\((.*?)\)|<img.*?src="(.*?)".*?>""")
 
         var prevIdx = 0
@@ -79,6 +80,7 @@ class DetailViewModel @Inject constructor(
 
             val srcID = matchRes.groupValues[2].ifEmpty { matchRes.groupValues[3] }
             parseRes.add(MarkdownElement.Image(srcID))
+            requestPostImage(postType, postUrl, srcID)
 
             prevIdx = matchRes.range.last + 1
         }
@@ -91,13 +93,13 @@ class DetailViewModel @Inject constructor(
         return parseRes
     }
 
-    fun getPostImage(type: String, id: String, srcID: String) {
+    private fun requestPostImage(postType: String, postID: String, srcID: String) {
         viewModelScope.launch {
             _uiState.update { it.copy(postImageMap = it.postImageMap + (srcID to null)) }
 
-            val postImage = repository.getPostImage(type, id, srcID)
+            val postImage = repository.getPostImage(postType, postID, srcID)
             if(postImage == null) {
-                Log.e(LOG_TAG, "PostImage [$id] got error")
+                Log.e(LOG_TAG, "PostImage [$postID] got error")
                 return@launch
             }
 

@@ -29,6 +29,9 @@ converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref
 markwon-core = { module = "io.noties.markwon:core", version.ref = "markwon" }
 markwon-html = { module = "io.noties.markwon:html", version.ref = "markwon" }
 markwon-image = { module = "io.noties.markwon:image", version.ref = "markwon" }
+markwon-ext-strikethrough = { module = "io.noties.markwon:ext-strikethrough", version.ref = "markwon" }
+markwon-ext-tables = { module = "io.noties.markwon:ext-tables", version.ref = "markwon" }
+markwon-linkify = { module = "io.noties.markwon:linkify", version.ref = "markwon" }
 markwon-syntax-highlight = { module = "io.noties.markwon:syntax-highlight", version.ref = "markwon" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }

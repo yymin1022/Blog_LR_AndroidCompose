@@ -1,4 +1,4 @@
-package com.yong.blog.common.ui.theme
+package com.yong.blog.common.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

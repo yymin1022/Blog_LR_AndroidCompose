@@ -7,6 +7,8 @@ plugins {
 
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
 android {
@@ -17,8 +19,8 @@ android {
         applicationId = "com.yong.blog"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -63,8 +65,11 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.markwon.core)
+    implementation(libs.markwon.ext.strikethrough)
+    implementation(libs.markwon.ext.tables)
     implementation(libs.markwon.html)
     implementation(libs.markwon.image)
+    implementation(libs.markwon.linkify)
     implementation(libs.markwon.syntax.highlight)
     implementation(libs.prism4j.languages)
 

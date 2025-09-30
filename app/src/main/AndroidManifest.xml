@@ -13,9 +13,9 @@
         android:label="@string/app_name"
         android:name=".BlogApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:theme="@style/Theme.Blog_LR"
         tools:targetApi="31">
+
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
@@ -25,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
