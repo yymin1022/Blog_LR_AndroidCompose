@@ -64,7 +64,6 @@ fun DetailScreen(
         viewModel.logDetailEvent(postType, postID)
     }
 
-
     Scaffold(
         modifier = modifier,
         topBar = {
