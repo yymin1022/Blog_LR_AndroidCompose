@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.yong.blog.navigation.BlogNavHost
 import com.yong.blog.common.ui.theme.Blog_LRTheme
+import com.yong.blog.common.util.FirebaseUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,5 +26,11 @@ class MainActivity: ComponentActivity() {
                 )
             }
         }
+
+        initFirebaseAnalytics()
+    }
+
+    private fun initFirebaseAnalytics() {
+        FirebaseUtil.init()
     }
 }

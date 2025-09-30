@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.yong.blog.R
 import com.yong.blog.common.exception.PostException
 import com.yong.blog.common.ui.BlogUiStatus
+import com.yong.blog.common.util.FirebaseUtil
 import com.yong.blog.domain.model.PostData
 import com.yong.blog.domain.repository.PostDetailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,6 +43,10 @@ class DetailViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(DetailUiState())
     val uiState = _uiState.asStateFlow()
+
+    fun logDetailEvent(postType: String, postID: String) {
+        FirebaseUtil.logEvent(postType, postID)
+    }
 
     fun getPostData(postType: String, postID: String) {
         viewModelScope.launch {

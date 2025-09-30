@@ -68,6 +68,10 @@ fun ListScreen(
         viewModel.getPostList(postType)
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.logListEvent(postType)
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = {
