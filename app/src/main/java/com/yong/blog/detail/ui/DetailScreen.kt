@@ -60,6 +60,11 @@ fun DetailScreen(
         viewModel.getPostData(postType, postID)
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.logDetailEvent(postType, postID)
+    }
+
+
     Scaffold(
         modifier = modifier,
         topBar = {
