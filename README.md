@@ -1,6 +1,18 @@
 # UsefulBlog Android
 
-This is a Android client application of [UsefulBlog](https://github.com/yymin1022/UsefulBlog)
+This is a Android client application of [Useful IT Blog](https://github.com/yymin1022/UsefulBlog)
+
+Renders blog posts written in markdown, with customized renderer based on [Markwon Android](https://github.com/noties/Markwon)
+
+## Project Overview
+
+> This diagram is generated with Claude
+
+<img src="https://github.com/user-attachments/assets/201f6444-3b35-42b6-a641-2e0478785f95" width="70%" />
+
+- App Module - Compose based UI, ViewModel
+- Domain Module - Defines repository interface, DTO
+- Data Module - Implement repository with [Retrofit](https://github.com/square/retrofit), retrives post data from API Server 
 
 ## Get Started
 
@@ -8,10 +20,11 @@ This is a Android client application of [UsefulBlog](https://github.com/yymin102
    ```bash
    yong@ubuntu-server ~/ :$ git clone https://github.com/yymin1022/UsefulBlog_Android.git
    ```
-3. Build with gradle, and install to your own device
+2. Build with gradle, and install to your own device
    ```bash
-   yong@ubuntu-server ~/ :$ cd Useful_README
-   yong@ubuntu-server ~/Useful_README/ :$ ./gradlew assembleDebug
+   yong@ubuntu-server ~/ :$ cd UsefulBlog_Android
+   yong@ubuntu-server ~/UsefulBlog_Android/ :$ ./gradlew assembleDebug
+   yong@ubuntu-server ~/UsefulBlog_Android/ :$ adb install app/build/outputs/apk/app-debug.apk
    ```
 
 ## Team Members
@@ -32,7 +45,7 @@ This is a Android client application of [UsefulBlog](https://github.com/yymin102
 
 ## Useful links
 
-- [Blog](https://dev-lr.com)
+- [Useful IT Blog](https://dev-lr.com)
 - [GitHub](https://github.com/yymin1022)
 - [Instagram](https://instagram.com/useful_min)
 - [LinkedIn](https://linkedin.com/in/yymin1022)
