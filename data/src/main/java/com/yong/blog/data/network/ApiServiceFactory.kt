@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiServiceFactory {
-    private const val BLOG_API_URL = "https://dev-lr.com/"
+    private const val BLOG_API_URL = "https://useful-min.dev/"
 
     fun createApiService(
         interceptors: List<Interceptor> = emptyList()
